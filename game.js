@@ -6,6 +6,9 @@ import { showModal } from './ui.js';
 let isGameRunning = false;
 let color = 'black';
 
+// Variables globales pour gérer l'état de pause
+let isPaused = false;
+
 export function setGameRunning(newValue) {
   isGameRunning = newValue;
   console.log("Le jeu est en cours :", isGameRunning);
@@ -54,7 +57,6 @@ export function restartGame(ctx, canvas) {
   modal.style.display = 'none';
 
   console.log("Le jeu redémarre");
-
   initGame(ctx, canvas);
 }
 
@@ -67,4 +69,22 @@ export function gameLoop(ctx, canvas) {
   color = drawSquare(ctx, canvas);
 
   setTimeout(() => gameLoop(ctx, canvas), 200);
+}
+
+// Fonction pour mettre en pause ou reprendre le jeu
+export function togglePause(ctx, canvas) {
+  if (isPaused) {
+      // Reprendre le jeu
+      isPaused = false;
+      console.log('Jeu repris');
+      setGameRunning(true); // Relancer le jeu
+      startScoreCounter();
+      gameLoop(ctx, canvas);
+  } else {
+      // Mettre en pause le jeu
+      isPaused = true;
+      console.log('Jeu en pause');
+      setGameRunning(false); // Arrêter le jeu
+      stopScoreCounter();
+  }
 }

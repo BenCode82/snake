@@ -1,4 +1,4 @@
-import { startGame, initGame, setGameRunning, getGameRunning, restartGame } from './game.js';
+import { startGame, initGame, setGameRunning, getGameRunning, restartGame, togglePause } from './game.js';
 import { setDirectionX, setDirectionY } from './snake.js';
 
 // Set up the canvas and context
@@ -13,9 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Écouteur pour démarrer le jeu
+// Add event listener for arrow keys and space
 document.addEventListener('keydown', (event) => {
-
   // !getGameRunning &&
   if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
 
@@ -23,15 +22,18 @@ document.addEventListener('keydown', (event) => {
       setGameRunning(true); // Le jeu démarre
       startGame(ctx, canvas); // Appeler la fonction qui contient la boucle de jeu
     }
+    else {
+      if (event.key === 'ArrowUp') { setDirectionX(0); setDirectionY(-20); }
+      if (event.key === 'ArrowDown') { setDirectionX(0); setDirectionY(20); }
+      if (event.key === 'ArrowLeft') { setDirectionX(-20); setDirectionY(0); }
+      if (event.key === 'ArrowRight') { setDirectionX(20); setDirectionY(0); }
+    }
   }
-});
 
-// Add event listener for arrow keys
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowUp') { setDirectionX(0); setDirectionY(-20); }
-    if (event.key === 'ArrowDown') { setDirectionX(0); setDirectionY(20); }
-    if (event.key === 'ArrowLeft') { setDirectionX(-20); setDirectionY(0); }
-    if (event.key === 'ArrowRight') { setDirectionX(20); setDirectionY(0); }
+  // Mettre en pause ou reprendre le jeu
+  if (event.code === 'Space') {
+    togglePause(ctx, canvas);
+  }
 });
 
 initGame(ctx, canvas); // Initialiser le jeu
