@@ -1,8 +1,8 @@
-import { startGame, initGame, setGameRunning, getGameRunning, restartGame, togglePause } from './game.js';
+import { startGame, setGameRunning, restartGame, initGame, getGameRunning, getPauseStatus, togglePause} from './game.js';
 import { setDirectionX, setDirectionY } from './snake.js';
 
 // Set up the canvas and context
-const canvas = document.getElementById('gameCanvas');
+const canvas = document.getElementById('mainCanvas');
 const ctx = canvas.getContext('2d');
 
 // Écouteur pour le bouton de réinitialisation
@@ -15,18 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Add event listener for arrow keys and space
 document.addEventListener('keydown', (event) => {
-  // !getGameRunning &&
+
   if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
 
-    if (!getGameRunning()) {
+    if (event.key === 'ArrowUp') { setDirectionX(0); setDirectionY(-20); }
+    if (event.key === 'ArrowDown') { setDirectionX(0); setDirectionY(20); }
+    if (event.key === 'ArrowLeft') { setDirectionX(-20); setDirectionY(0); }
+    if (event.key === 'ArrowRight') { setDirectionX(20); setDirectionY(0); }
+
+    if (!getGameRunning() && !getPauseStatus()) {
       setGameRunning(true); // Le jeu démarre
       startGame(ctx, canvas); // Appeler la fonction qui contient la boucle de jeu
-    }
-    else {
-      if (event.key === 'ArrowUp') { setDirectionX(0); setDirectionY(-20); }
-      if (event.key === 'ArrowDown') { setDirectionX(0); setDirectionY(20); }
-      if (event.key === 'ArrowLeft') { setDirectionX(-20); setDirectionY(0); }
-      if (event.key === 'ArrowRight') { setDirectionX(20); setDirectionY(0); }
     }
   }
 
@@ -37,3 +36,4 @@ document.addEventListener('keydown', (event) => {
 });
 
 initGame(ctx, canvas); // Initialiser le jeu
+console.log("TEST in controller.js")

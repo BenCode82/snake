@@ -1,13 +1,16 @@
-import { drawSnake, initSnake, moveSnake } from './snake.js';
-import { drawSquare } from './utils.js';
-import { startScoreCounter, stopScoreCounter, resetScore } from './score.js';
-import { showModal } from './ui.js';
+import { initSnake, drawSnake, moveSnake } from './snake.js';
+import { initStars, initMilkyWay, initSquare, shineStars, drawSquare, drawMilkyWay } from './utils.js';
+import { resetScoreAndTime, startCount, stopCount } from './score.js';
+import { showMessage, showModal } from './ui.js';
+//
 
 let isGameRunning = false;
-let color = 'black';
-
-// Variables globales pour gérer l'état de pause
 let isPaused = false;
+let gameDelay = 200;
+
+export function getPauseStatus() {
+  return isPaused
+}
 
 export function setGameRunning(newValue) {
   isGameRunning = newValue;
@@ -18,11 +21,30 @@ export function getGameRunning() {
   return isGameRunning;
 }
 
+export function initGame(ctx, canvas) {
+  // Initialiser le jeu
+  console.log("Initialisation du jeu");
+  isGameRunning = false;
+
+  // Initialiser le fond
+  initStars(ctx, canvas.width, canvas.height);
+  initMilkyWay(ctx, canvas.width, canvas.height);
+
+  // Initialiser le serpent
+  initSnake();
+  drawSnake(ctx);
+  initSquare(ctx, canvas);
+
+  resetScoreAndTime(); // Initialiser le score et le temps à 0
+
+  showMessage("Bonjour, aventurier ! Prêt à explorer ce monde mystérieux ?");
+}
+
 // Fonction pour démarrer le jeu
 export function startGame(ctx, canvas) {
-  console.log("Le jeu démarre !");
+  showMessage("Le jeu démarre !");
 
-  startScoreCounter(); // Démarre le compteur de score
+  startCount(); // Démarre le compteur
   gameLoop(ctx, canvas); // Démarrer la boucle de jeu
 }
 
@@ -30,28 +52,10 @@ export function endGame() {
   console.log("Le jeu se termine !");
 
   isGameRunning = false;
-  stopScoreCounter(); // Arrête le compteur
-
+  stopCount(); // Arrête le compteur
   showModal(); // Affiche la modale
 }
 
-// Fonction pour initialiser le jeu
-export function initGame(ctx, canvas) {
-  console.log("Initialisation du jeu");
-
-  // Initialiser le serpent
-  initSnake();
-  drawSnake(ctx, canvas);
-  drawSquare(ctx, canvas);
-
-  // Initialiser le score à 0
-  resetScore()
-
-  // Initialiser le jeu
-  isGameRunning = false; // ????????????
-}
-
-// Fonction pour redémarrer le jeu
 export function restartGame(ctx, canvas) {
   const modal = document.getElementById('modal');
   modal.style.display = 'none';
@@ -60,31 +64,40 @@ export function restartGame(ctx, canvas) {
   initGame(ctx, canvas);
 }
 
-// Exemple de boucle de jeu
 export function gameLoop(ctx, canvas) {
   if (!isGameRunning) return;
 
-  moveSnake(canvas, color);
-  drawSnake(ctx, canvas);
-  color = drawSquare(ctx, canvas);
+  shineStars(ctx, canvas.width, canvas.height);
+  drawMilkyWay(ctx);
 
-  setTimeout(() => gameLoop(ctx, canvas), 200);
+  moveSnake(ctx,canvas);
+  drawSnake(ctx);
+
+  drawSquare(ctx, canvas);
+  // animateSquareColor(ctx);
+
+  setTimeout(() => gameLoop(ctx, canvas), gameDelay);
 }
 
-// Fonction pour mettre en pause ou reprendre le jeu
 export function togglePause(ctx, canvas) {
   if (isPaused) {
       // Reprendre le jeu
       isPaused = false;
       console.log('Jeu repris');
       setGameRunning(true); // Relancer le jeu
-      startScoreCounter();
+      startCount();
+
       gameLoop(ctx, canvas);
   } else {
       // Mettre en pause le jeu
       isPaused = true;
       console.log('Jeu en pause');
       setGameRunning(false); // Arrêter le jeu
-      stopScoreCounter();
+
+      stopCount();
   }
+}
+
+export function changeDelay(NewDelay) {
+  gameDelay = NewDelay
 }

@@ -7,6 +7,7 @@
     <title>Snake Game</title>
 
     <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
     </style>
 </head>
@@ -14,25 +15,31 @@
 <body>
   <div class="container">
 
-    <div id="scoreBoard">
-      <div class="digit">
-        <span class="top">0</span>
-        <span class="bottom">0</span>
+    <div id="gameContainer">
+
+      <canvas id="mainCanvas" width="600" height="400"></canvas>
+
+      <div id="scoreandtimeBoard">
+
+        <div id="timediv">
+          <h1>TIME</h1>
+          <div id="timeBoard"></div>
+        </div>
+
+        <div id="scorediv">
+          <h1>SCORE</h1>
+          <div id="scoreBoard"></div>
+        </div>
+
       </div>
-      <div class="digit">
-        <span class="top">0</span>
-        <span class="bottom">0</span>
-      </div>
-      <div class="digit">
-        <span class="top">0</span>
-        <span class="bottom">0</span>
-      </div>
+
     </div>
 
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="messageWindow">
+      <div id="messageContent"></div>
+    </div>
 
   </div>
-
 
   <div id="modal">
     <h1>Défaite !</h1>

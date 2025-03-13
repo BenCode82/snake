@@ -1,21 +1,18 @@
-import { setGameRunning, getGameRunning, endGame } from './game.js';
-import { setRandomX, getRandomX, getRandomY, drawCheckerboard  } from './utils.js';
+import { getGameRunning, endGame } from './game.js';
+import { newRandomColor, drawRoundedRect, getSquareColor, setRandomX, getRandomX, getRandomY } from './utils.js';
+import { addCollision } from './score.js';
+
 
 export let snake = [];
 let directionX;
 let directionY;
 
-const headImage = new Image();
-headImage.src = './snake_head_20x20.png';
-
-// Fonctions pour manipuler les variables directionX et directionY
 export function setDirectionX(newValue) {
   directionX = newValue;
 }
 export function setDirectionY(newValue) {
   directionY = newValue;
 }
-
 export function getDirectionX() {
   return directionX;
 }
@@ -25,19 +22,16 @@ export function getDirectionY() {
 
 // Initialisation du serpent
 export function initSnake() {
+  const newColor = newRandomColor();
   snake = [
-    { x: 100, y: 100, color: 'black' },
-    { x: 80, y: 100, color: 'black' }
+    { x: 180, y: 180, color: newColor },
+    { x: 160, y: 180, color: newColor }
   ];
-
-  directionX = 20; // Initial direction ?????????
-  directionY = 0;
 }
 
-// Fonction pour détecter une collision
-export function collisionDetected(canvas) {
+export function collisionDetected(canvasWidth, canvasHeight) {
   // Collision avec les murs
-  if ((snake[0].x < 0 || snake[0].x > 380) || (snake[0].y < 0 || snake[0].y > 380)) {
+  if ((snake[0].x < 0 || snake[0].x > canvasWidth-20) || (snake[0].y < 0 || snake[0].y > canvasHeight-20)) {
     console.log('game over');
     endGame();
   }
@@ -51,22 +45,44 @@ export function collisionDetected(canvas) {
   }
 
   // Collision avec le carré
-  if (snake[0].x === getRandomX() && snake[0].y === getRandomY()) {
-    setRandomX(0);
-    return true;
+  if (directionX == 20) {
+    if (snake[0].x === getRandomX()-20 && snake[0].y === getRandomY()) {
+      addCollision();
+      return true;
+    }
+  }
+  else if (directionX == -20) {
+    if (snake[0].x === getRandomX()+20 && snake[0].y === getRandomY()) {
+      addCollision();
+      return true;
+    }
+  }
+  else if (directionY == 20) {
+    if (snake[0].x === getRandomX() && snake[0].y === getRandomY()-20) {
+      addCollision();
+      return true;
+    }
+  }
+  else if (directionY == -20) {
+    if (snake[0].x === getRandomX() && snake[0].y === getRandomY()+20) {
+      addCollision();
+      return true;
+    }
   }
 
   return false;
 }
 
 // Déplacement du serpent
-export function moveSnake(canvas, newcolor) {
+export function moveSnake(ctx, canvas) {
 
-  if (collisionDetected(canvas) === true) {
+  if (collisionDetected(canvas.width, canvas.height) === true) {
+    // invertColors(ctx, canvas);
+
     const newHead = {
         x: snake[0].x + directionX,
         y: snake[0].y + directionY,
-        color: newcolor
+        color: getSquareColor()
     };
     snake.unshift(newHead);
 
@@ -81,8 +97,8 @@ export function moveSnake(canvas, newcolor) {
     };
     // Rajoute la tete
     snake.unshift(newHead);
-    
-    // Decale les couoleurs
+
+    // Decale les couleurs
     snake.forEach((segment, index) => {
     if (index > 0 && index < snake.length - 1) {
       segment.color = snake[index + 1].color; // Couleur du segment suivant
@@ -91,21 +107,40 @@ export function moveSnake(canvas, newcolor) {
     // Retire le dernier segment si pas de collision
     snake.pop();
   }
-
 }
 
-// Function to clear the canvas and redraw the rectangle at the new position
-export function drawSnake(ctx, canvas) {
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Dessiner le damier
-  drawCheckerboard(ctx, canvas.width, canvas.height, 20);
-
+export function drawSnake(ctx) {
   snake.forEach(segment => {
-    // console.log(segment);
-
     ctx.fillStyle = segment.color;
-    ctx.fillRect(segment.x, segment.y, 20, 20);
+    drawRoundedRect(ctx, segment.x, segment.y, 20, 20, 5);
   });
 }
+
+// function invertRGBColor(rgbString) {
+//   // Extraire les valeurs r, g, b de la chaîne
+//   const matches = rgbString.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+
+//   if (!matches) {
+//       throw new Error('Format RGB invalide. Utilisez le format "rgb(r, g, b)".');
+//   }
+
+//   // Convertir les valeurs en nombres
+//   const r = parseInt(matches[1], 10);
+//   const g = parseInt(matches[2], 10);
+//   const b = parseInt(matches[3], 10);
+
+//   // Inverser les couleurs
+//   const invertedR = 255 - r;
+//   const invertedG = 255 - g;
+//   const invertedB = 255 - b;
+
+//   // Reconstruire la chaîne RGB inversée
+//   return `rgb(${invertedR}, ${invertedG}, ${invertedB})`;
+// }
+
+// function invertColors(ctx, canvas) {
+//   // Inverser les couleurs
+//   snake.forEach(segment => {
+//     segment.color = invertRGBColor(segment.color);
+//   });
+// }

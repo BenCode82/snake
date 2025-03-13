@@ -8,32 +8,44 @@ export function hideModal() {
   modal.style.display = 'none';
 }
 
-let score = 0;
-
 export function updateScoreDisplay(newScore) {
-  const digits = Array.from(String(newScore), Number);  // Convertir le score en tableau de chiffres
   const scoreBoard = document.getElementById('scoreBoard');
-  const digitElements = scoreBoard.querySelectorAll('.digit');
+  scoreBoard.textContent = newScore; // Afficher directement le score
+}
 
-  // Ajuster la longueur des chiffres pour correspondre au nombre de divs
-  while (digits.length < digitElements.length) {
-    digits.unshift(0);  // Ajouter des 0 au début pour combler
+export function updateTimeDisplay(newTime) {
+  const timeBoard = document.getElementById('timeBoard');
+  timeBoard.textContent = newTime; // Afficher directement le nombre
+}
+
+let currentInterval = null; // Stocker l'identifiant de l'intervalle en cours
+
+export function showMessage(message, speed = 50) {
+  const messageContent = document.getElementById('messageContent');
+  const messageWindow = document.getElementById('messageWindow');
+
+  // Afficher la fenêtre
+  messageWindow.style.display = 'block';
+
+  // Arrêter l'affichage du message en cours (s'il y en a un)
+  if (currentInterval) {
+    clearInterval(currentInterval);
+    currentInterval = null;
   }
 
-  digits.forEach((num, index) => {
-    const digitElement = digitElements[index];
-    const topSpan = digitElement.querySelector('.top');
-    const bottomSpan = digitElement.querySelector('.bottom');
+  // Réinitialiser le contenu
+  messageContent.textContent = '';
 
-    if (topSpan.textContent != num) {
-      digitElement.classList.add('flip');
-
-      // Mettre à jour les chiffres après l'animation
-      setTimeout(() => {
-        topSpan.textContent = num;
-        bottomSpan.textContent = num;
-        digitElement.classList.remove('flip');
-      }, 500);
+  let index = 0;
+  currentInterval = setInterval(() => {
+    if (index < message.length) {
+      // Ajouter une lettre à la fois
+      messageContent.textContent += message[index];
+      index++;
+    } else {
+      // Arrêter l'animation
+      clearInterval(currentInterval);
+      currentInterval = null;
     }
-  });
+  }, speed); // Vitesse d'affichage (en millisecondes)
 }
