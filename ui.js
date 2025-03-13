@@ -1,12 +1,12 @@
-export function showModal() {
-  const modal = document.getElementById('modal');
-  modal.style.display = 'block';
-}
+// export function showModal() {
+//   const modal = document.getElementById('modal');
+//   modal.style.display = 'block';
+// }
 
-export function hideModal() {
-  const modal = document.getElementById('modal');
-  modal.style.display = 'none';
-}
+// export function hideModal() {
+//   const modal = document.getElementById('modal');
+//   modal.style.display = 'none';
+// }
 
 export function updateScoreDisplay(newScore) {
   const scoreBoard = document.getElementById('scoreBoard');

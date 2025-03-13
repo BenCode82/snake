@@ -50,7 +50,7 @@ async function asyncTimeCounter() {
     else if (score > 150) { changeDelay(160); }
     else if (score > 100) {
       changeDelay(180);
-      showMessage("On accelere !");
+      // showMessage("On accelere !");
      }
   }
 }

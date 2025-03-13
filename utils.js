@@ -108,19 +108,24 @@ export function initMilkyWay(ctx, canvasWidth, canvasHeight) {
     const colorVariation = Math.random();
     const color = colorVariation < 0.2 ? `rgba(200, 220, 255, ${opacity})` : `rgba(255, 255, 255, ${opacity})`;
 
+    // Vitesse aléatoire pour chaque étoile
+    const speed = Math.random() * 0.5 + 0.1; // Vitesse entre 0.1 et 0.6
 
-    milkyStars.push({ x, y, radius, color});
-
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fill();
+    milkyStars.push({ x, y, radius, color, speed });
   }
 }
 
-export function drawMilkyWay(ctx) {
-  // Redessine la voie lactée
+export function drawMilkyWay(ctx, canvasWidth) {
   for (const star of milkyStars) {
+    // Mettre à jour la position x de l'étoile
+    star.x += star.speed;
+
+    // Si l'étoile sort du canvas à droite, la replacer à gauche
+    if (star.x > canvasWidth) {
+      star.x = 0;
+    }
+
+    // Dessiner l'étoile
     ctx.fillStyle = star.color;
     ctx.beginPath();
     ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
@@ -154,31 +159,30 @@ export function drawSquare(ctx, canvas) {
   drawRoundedRect(ctx, randomX, randomY, 20, 20, 5);
 }
 
+export function animateSquareColor(ctx) {
+  let startTime = null;
 
-// export function animateSquareColor(ctx) {
-//   let startTime = null;
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
 
-//   function step(timestamp) {
-//     if (!startTime) startTime = timestamp;
-//     const elapsed = timestamp - startTime;
+    duration = 200; // Choix d'un effet d'1 seconde
+    const progress = Math.min(elapsed / duration, 1);
 
-//     duration = 1; // Choix d'un effet d'1 seconde
-//     const progress = Math.min(elapsed / duration, 1);
+    // Calculer la couleur intermédiaire
+    const currentColor = interpolateColor(squareColor, newRandomColor(), progress);
 
-//     // Calculer la couleur intermédiaire
-//     const currentColor = interpolateColor(squareColor, newRandomColor(), progress);
+    // Dessiner un carré avec la couleur interpolée
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = currentColor;
+    // ctx.fillRect(randomX, randomY, 20, 20);
+    drawRoundedRect(ctx, randomX, randomY, 20, 20, 5)
 
-//     // Dessiner un carré avec la couleur interpolée
-//     // ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     ctx.fillStyle = currentColor;
-//     // ctx.fillRect(randomX, randomY, 20, 20);
-//     drawRoundedRect(ctx, randomX, randomY, 20, 20, 5)
+    // Continuer l'animation
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
 
-//     // Continuer l'animation
-//     if (progress < 1) {
-//       requestAnimationFrame(step);
-//     }
-//   }
-
-//   requestAnimationFrame(step);
-// }
+  requestAnimationFrame(step);
+}
