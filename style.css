@@ -10,7 +10,9 @@ body {
 }
 
 .container {
-  width: 90vw;
+  width: 100vw;
+  height: 100%;
+
   margin: 10px;
 
   gap: 100px;
@@ -28,6 +30,8 @@ body {
   width: 100%;
 
   align-items: center;
+
+  position: relative;
 }
 
 #scoreandtimeBoard {
@@ -72,6 +76,10 @@ canvas {
   border: 10px solid rgb(32, 31, 31); /* Bord plus épais et gris */
   border-radius: 10px; /* Coins arrondis */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombre pour un effet visuel */
+
+  /* position: sticky; */
+
+  z-index: 1;
 }
 
 #modal {
@@ -126,6 +134,7 @@ canvas {
   white-space: pre-wrap; /* Permet les sauts de ligne et les espaces */
   overflow: hidden;
   border-right: 2px solid #fff; /* Effet de curseur clignotant */
+
   animation: blinkCursor 0.75s steps(1) infinite;
 }
 
@@ -137,7 +146,31 @@ canvas {
 }
 
 #countdown {
+  position: absolute;
+
   font-family: Arial, sans-serif;
-  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.6), 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.4);
+
   user-select: none; /* Empêche la sélection du texte */
+
+  z-index: 10;
+  animation: shakeAndShrink 1s linear infinite;
+}
+
+@keyframes shakeAndShrink {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate(-50%, -50%) rotate(2deg) scale(0.75);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(-2deg) scale(0.5);
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(2deg) scale(0.25);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(0);
+  }
 }

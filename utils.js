@@ -3,6 +3,9 @@ export let randomY = 0;
 export let squareColor = '';
 export let colors = 0;
 
+const starCount = 200;
+const milkyStarCount = 5000; // Nombre de points pour la Voie lactée
+
 const stars = [];
 const milkyStars = [];
 
@@ -51,7 +54,6 @@ export function initStars(ctx, canvasWidth, canvasHeight) {
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
   // Dessiner les étoiles
-  const starCount = 100;
   for (let i = 0; i < starCount; i++) {
     const x = Math.random() * canvasWidth;
     const y = Math.random() * canvasHeight;
@@ -85,7 +87,6 @@ export function shineStars(ctx, canvasWidth, canvasHeight) {
 }
 
 export function initMilkyWay(ctx, canvasWidth, canvasHeight) {
-  const starCount = 1000; // Nombre de points pour la Voie lactée
   const minRadius = 0.5; // Rayon minimal des points
   const maxRadius = 1.5; // Rayon maximal des points
   const minOpacity = 0.1; // Opacité minimale
@@ -94,7 +95,7 @@ export function initMilkyWay(ctx, canvasWidth, canvasHeight) {
   const centerY = canvasHeight / 2;
   const spread = 300; // Étendue de la région dense
 
-  for (let i = 0; i < starCount; i++) {
+  for (let i = 0; i < milkyStarCount; i++) {
     // Position aléatoire autour du centre
     const angle = Math.random() * Math.PI * 2;
     const distance = Math.random() * spread;
@@ -172,7 +173,16 @@ export function drawSquare(ctx, canvas) {
     randomY = (Math.floor(Math.random() * ((canvas.height - 40) / 20)) * 20) + 20;
   }
 
+  // Configurer l'ombre
+  ctx.shadowColor = "rgba(200, 200, 200, 0.5)"; // Couleur de l'ombre (noir semi-transparent)
+  ctx.shadowBlur = 10; // Flou de l'ombre
+  ctx.shadowOffsetX = 5; // Décalage horizontal de l'ombre
+  ctx.shadowOffsetY = 5; // Décalage vertical de l'ombre
+
   squareColor = interpolateColor(squareColor, newRandomColor());
   ctx.fillStyle = squareColor;
   drawRoundedRect(ctx, randomX, randomY, 20, 20, 5);
+
+  // Désactiver l'ombre pour les prochains rectangles à dessiner
+  ctx.shadowColor = "transparent";
 }
