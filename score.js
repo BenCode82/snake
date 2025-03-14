@@ -52,7 +52,7 @@ async function asyncTimeCounter() {
 
     if (score > 7000 && !messageSent7000) {
       changeDelay(80);
-      showMessage("Tu es bon...\non accelere !");
+      showMessage("Tu entres dans le couloir de la mort. \nBonne chance \n \n 💀💀💀");
       messageSent7000 = true;
     }
     else if (score > 5000 && !messageSent5000) {

@@ -135,3 +135,9 @@ canvas {
     border-right-color: transparent;
   }
 }
+
+#countdown {
+  font-family: Arial, sans-serif;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+  user-select: none; /* Empêche la sélection du texte */
+}

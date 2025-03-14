@@ -5,7 +5,8 @@ import { showMessage } from './ui.js';
 
 let isGameRunning = false;
 let isPaused = false;
-let gameDelay = 200;
+let gameDelay;
+let gameIntervalId;
 
 export function getPauseStatus() {
   return isPaused
@@ -19,12 +20,6 @@ export function setGameRunning(newValue) {
 export function getGameRunning() {
   return isGameRunning;
 }
-
-
-let gameIntervalId;
-
-
-
 
 export function initGame(ctx, canvas) {
   console.log("Initialisation du jeu");

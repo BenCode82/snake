@@ -55,4 +55,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 showMessage("Bonjour, aventurier ! Prêt à explorer ce monde mystérieux ?");
+
+
+// initInterface();
 initGame(ctx, canvas); // Initialiser le jeu

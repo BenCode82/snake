@@ -1,6 +1,7 @@
 import { getGameRunning, endGame } from './game.js';
 import { newRandomColor, drawRoundedRect, getSquareColor, setRandomX, getRandomX, getRandomY } from './utils.js';
 import { addCollision } from './score.js';
+import { startCountdown } from './ui.js';
 
 
 export let snake = [];
@@ -77,7 +78,7 @@ export function collisionDetected(canvasWidth, canvasHeight) {
 export function moveSnake(ctx, canvas) {
 
   if (collisionDetected(canvas.width, canvas.height) === true) {
-    // invertColors(ctx, canvas);
+    invertColors(ctx);
 
     const newHead = {
         x: snake[0].x + directionX,
@@ -88,6 +89,7 @@ export function moveSnake(ctx, canvas) {
 
     // Ne pas retirer la queue pour que le serpent grossisse
     setRandomX(0);
+    startCountdown(ctx, canvas)
 
   } else if (getGameRunning() === true) {
     const newHead = {
@@ -116,28 +118,33 @@ export function drawSnake(ctx) {
   });
 }
 
-// function invertRGBColor(rgbString) {
-//   // Extraire les valeurs r, g, b de la chaîne
-// const regex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
-// const match1 = color1.match(regex);
-// const match2 = color2.match(regex);
+function invertRGBColor(color) {
+  // Extraire les valeurs r, g, b de la chaîne
+  const regex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
+  const match = color.match(regex);
 
-// const r = parseInt(match1[1], 10);
-// const g = parseInt(match1[2], 10);
-// const b = parseInt(match1[3], 10);
+  const r = parseInt(match[1], 10);
+  const g = parseInt(match[2], 10);
+  const b = parseInt(match[3], 10);
 
-//   // Inverser les couleurs
-//   const invertedR = 255 - r;
-//   const invertedG = 255 - g;
-//   const invertedB = 255 - b;
+  // Inverser les couleurs
+  const invertedR = 255 - r;
+  const invertedG = 255 - g;
+  const invertedB = 255 - b;
 
-//   // Reconstruire la chaîne RGB inversée
-//   return `rgb(${invertedR}, ${invertedG}, ${invertedB})`;
-// }
+  return `rgb(${invertedR}, ${invertedG}, ${invertedB})`;
+}
 
-// function invertColors(ctx, canvas) {
-//   // Inverser les couleurs
-//   snake.forEach(segment => {
-//     segment.color = invertRGBColor(segment.color);
-//   });
-// }
+function invertColors(ctx) {
+  const numberOfIterations = 6;
+  const interval = 300; // en millisecondes
+
+  for (let i = 0; i < numberOfIterations; i++) {
+    setTimeout(() => {
+      snake.forEach(segment => {
+        segment.color = invertRGBColor(segment.color);
+      });
+      drawSnake(ctx);
+    }, i * interval);
+  }
+}
