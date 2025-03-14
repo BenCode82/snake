@@ -1,5 +1,7 @@
 export let randomX = 0;
 export let randomY = 0;
+let newX,newY;
+
 export let squareColor = '';
 export let colors = 0;
 
@@ -171,7 +173,16 @@ export function drawSquare(ctx, canvas) {
   if (randomX === 0) {
     randomX = (Math.floor(Math.random() * ((canvas.width - 40) / 20)) * 20) + 20;
     randomY = (Math.floor(Math.random() * ((canvas.height - 40) / 20)) * 20) + 20;
+
+    newX = randomX
+    newY = randomY
   }
+
+  if (randomX > newX) { randomX -= 20; }
+  else if (randomX < newX) { randomX += 20; }
+
+  if (randomY > newY) { randomY -= 20; }
+  else if (randomY < newY) { randomY += 20; }
 
   // Configurer l'ombre
   ctx.shadowColor = "rgba(200, 200, 200, 0.5)"; // Couleur de l'ombre (noir semi-transparent)
@@ -185,4 +196,9 @@ export function drawSquare(ctx, canvas) {
 
   // Désactiver l'ombre pour les prochains rectangles à dessiner
   ctx.shadowColor = "transparent";
+}
+
+export function moveSquare(canvasWidth, canvasHeight) {
+  newX = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
+  newY = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;
 }

@@ -52,7 +52,6 @@ export function initGame(ctx, canvas) {
       drawMilkyWay(ctx, canvas.width);
       drawSnake(ctx);
       drawSquare(ctx, canvas);
-      insertMetallicSquare(ctx);
     } else {
       clearInterval(gameIntervalId); // Arrêter l'intervalle si le jeu démarre
     }
@@ -88,7 +87,7 @@ export function gameLoop(ctx, canvas) {
   drawSnake(ctx);
   drawSquare(ctx, canvas);
 
-  insertMetallicSquare(ctx);
+  // insertMetallicSquare(ctx);
 
   if (squareAcceleration) {
     squareAcceleration = false;

@@ -90,7 +90,7 @@ export function moveSnake(ctx, canvas) {
     setRandomX(0);
 
     // Lance un decompte avant d'envoyer un evenement
-    startCountdown()
+    startCountdown(canvas.width, canvas.height)
 
   } else if (getGameRunning() === true) {
     const newHead = {

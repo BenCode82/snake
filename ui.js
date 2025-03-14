@@ -1,5 +1,5 @@
 import { resetScoreAndTime } from './score.js';
-import { drawRoundedRect } from './utils.js';
+import { drawRoundedRect, moveSquare } from './utils.js';
 
 const countdownElement = document.getElementById("countdown");
 countdownElement.style.display = "none";
@@ -76,11 +76,10 @@ function centerCountdown(canvas) {
   countdownElement.style.transform = "translate(-50%, -50%)";
 }
 
-export function startCountdown() {
+export function startCountdown(canvasWidth, canvasHeight) {
   if (isCountdowning) return;
 
   isCountdowning = true;
-
   count = 3; // Commence à 3
   const intervalId = setInterval(() => {
     if (count === 0) {
@@ -88,6 +87,7 @@ export function startCountdown() {
       countdownElement.style.display = "none"; // Cache l'élément
 
       isCountdowning = false;
+      moveSquare(canvasWidth, canvasHeight);
     } else {
       countdownElement.textContent = count; // Met à jour le chiffre
       countdownElement.style.display = "block"; // Affiche l'élément
