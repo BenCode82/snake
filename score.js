@@ -6,6 +6,16 @@ let time = 0;
 
 let isCounting = false;
 
+let messageSent400 = false;
+let messageSent800 = false;
+let messageSent1200 = false;
+let messageSent1600 = false;
+let messageSent2000 = false;
+let messageSent2500 = false;
+let messageSent3500 = false;
+let messageSent5000 = false;
+let messageSent7000 = false;
+
 export function getScore() {
   return score;
 }
@@ -39,18 +49,51 @@ async function asyncTimeCounter() {
     updateScoreDisplay(score);
     updateTimeDisplay(time);
 
-    if (score > 420) {
-      changeDelay(80); }
-    else if (score > 390) { changeDelay(100); }
-    else if (score > 360) { changeDelay(110); }
-    else if (score > 330) { changeDelay(120); }
-    else if (score > 300) { changeDelay(130); }
-    else if (score > 250) { changeDelay(140); }
-    else if (score > 200) { changeDelay(150); }
-    else if (score > 150) { changeDelay(160); }
-    else if (score > 100) {
+
+    if (score > 7000 && !messageSent7000) {
+      changeDelay(80);
+      showMessage("Tu es bon...\non accelere !");
+      messageSent7000 = true;
+    }
+    else if (score > 5000 && !messageSent5000) {
+      changeDelay(100);
+      showMessage("Tu es bon...\non accelere !");
+      messageSent5000 = true;
+    }
+    else if (score > 3500 && !messageSent3500) {
+      changeDelay(110);
+      showMessage("Tu es bon...\non accelere !");
+      messageSent3500 = true;
+    }
+    else if (score > 2500 && !messageSent2500) {
+      changeDelay(120);
+      showMessage("Tu es bon...\non accelere !");
+      messageSent2500 = true;
+    }
+    else if (score > 2000 && !messageSent2000) {
+      changeDelay(130);
+      showMessage("Tu es bon...\non accelere !");
+      messageSent2000 = true;
+    }
+    else if (score > 1600 && !messageSent1600) {
+      changeDelay(140);
+      showMessage("Tu es bon...\non accelere !");
+      messageSent1600 = true;
+    }
+    else if (score > 1200 && !messageSent1200) {
+      changeDelay(150);
+      showMessage("Tu es bon...\non accelere !");
+      messageSent1200 = true;
+    }
+    else if (score > 800 && !messageSent800) {
+      changeDelay(160);
+      showMessage("Tu es bon...\non accelere !");
+      messageSent800 = true;
+    }
+    else if (score > 400 && !messageSent400) {
       changeDelay(180);
-      // showMessage("On accelere !");
+      showMessage("Tu es bon...\non accelere !");
+      messageSent400 = true;
      }
   }
 }

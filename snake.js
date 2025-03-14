@@ -118,16 +118,13 @@ export function drawSnake(ctx) {
 
 // function invertRGBColor(rgbString) {
 //   // Extraire les valeurs r, g, b de la chaîne
-//   const matches = rgbString.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+// const regex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
+// const match1 = color1.match(regex);
+// const match2 = color2.match(regex);
 
-//   if (!matches) {
-//       throw new Error('Format RGB invalide. Utilisez le format "rgb(r, g, b)".');
-//   }
-
-//   // Convertir les valeurs en nombres
-//   const r = parseInt(matches[1], 10);
-//   const g = parseInt(matches[2], 10);
-//   const b = parseInt(matches[3], 10);
+// const r = parseInt(match1[1], 10);
+// const g = parseInt(match1[2], 10);
+// const b = parseInt(match1[3], 10);
 
 //   // Inverser les couleurs
 //   const invertedR = 255 - r;

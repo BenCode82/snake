@@ -26,6 +26,7 @@ export function newRandomColor() {
   colors = [255, Math.floor(Math.random() * 128), Math.floor(Math.random() * 128)];
   colors.sort(() => Math.random() - 0.5); // Mélanger les composantes
 
+  // console.log(`rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`)
   return `rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`;
 }
 
@@ -145,44 +146,33 @@ export function initSquare(ctx, canvas) {
   drawRoundedRect(ctx, randomX, randomY, 20, 20, 5);
 }
 
+function interpolateColor(color1, color2) {
+  const regex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
+  const match1 = color1.match(regex);
+  const match2 = color2.match(regex);
+
+  const r1 = parseInt(match1[1], 10);
+  const g1 = parseInt(match1[2], 10);
+  const b1 = parseInt(match1[3], 10);
+  const r2 = parseInt(match2[1], 10);
+  const g2 = parseInt(match2[2], 10);
+  const b2 = parseInt(match2[3], 10);
+
+  // Interpoler chaque composante
+  const r = Math.round((r1 + r2)/2);
+  const g = Math.round((g1 + g2)/2);
+  const b = Math.round((b1 + b2)/2);
+
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 export function drawSquare(ctx, canvas) {
   if (randomX === 0) {
     randomX = (Math.floor(Math.random() * ((canvas.width - 40) / 20)) * 20) + 20;
     randomY = (Math.floor(Math.random() * ((canvas.height - 40) / 20)) * 20) + 20;
-
-    colors = [255, 0, Math.floor(Math.random() * 256)];
-    colors.sort(() => Math.random() - 0.5); // Mélanger les composantes
-    squareColor = `rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`;
   }
 
+  squareColor = interpolateColor(squareColor, newRandomColor());
   ctx.fillStyle = squareColor;
   drawRoundedRect(ctx, randomX, randomY, 20, 20, 5);
-}
-
-export function animateSquareColor(ctx) {
-  let startTime = null;
-
-  function step(timestamp) {
-    if (!startTime) startTime = timestamp;
-    const elapsed = timestamp - startTime;
-
-    duration = 200; // Choix d'un effet d'1 seconde
-    const progress = Math.min(elapsed / duration, 1);
-
-    // Calculer la couleur intermédiaire
-    const currentColor = interpolateColor(squareColor, newRandomColor(), progress);
-
-    // Dessiner un carré avec la couleur interpolée
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = currentColor;
-    // ctx.fillRect(randomX, randomY, 20, 20);
-    drawRoundedRect(ctx, randomX, randomY, 20, 20, 5)
-
-    // Continuer l'animation
-    if (progress < 1) {
-      requestAnimationFrame(step);
-    }
-  }
-
-  requestAnimationFrame(step);
 }

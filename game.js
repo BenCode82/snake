@@ -1,5 +1,5 @@
 import { initSnake, drawSnake, moveSnake } from './snake.js';
-import { initStars, initMilkyWay, initSquare, shineStars, drawSquare, drawMilkyWay, animateSquareColor } from './utils.js';
+import { initStars, initMilkyWay, initSquare, shineStars, drawSquare, drawMilkyWay } from './utils.js';
 import { resetScoreAndTime, startCount, stopCount } from './score.js';
 import { showMessage } from './ui.js';
 
@@ -86,9 +86,7 @@ export function gameLoop(ctx, canvas) {
 
   moveSnake(ctx,canvas);
   drawSnake(ctx);
-
-  // drawSquare(ctx, canvas);
-  animateSquareColor(ctx);
+  drawSquare(ctx, canvas);
 
   setTimeout(() => gameLoop(ctx, canvas), gameDelay);
 }
