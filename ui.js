@@ -1,5 +1,13 @@
-let currentInterval = null; // Stocker l'identifiant de l'intervalle en cours
+import { resetScoreAndTime } from './score.js';
+import { drawRoundedRect } from './utils.js';
+
 const countdownElement = document.getElementById("countdown");
+countdownElement.style.display = "none";
+countdownElement.style.fontSize = `200px`; // Taille des chiffres du decompte
+
+let currentInterval;
+let isCountdowning;
+let count;
 
 export function updateScoreDisplay(newScore) {
   const scoreBoard = document.getElementById('scoreBoard');
@@ -9,6 +17,19 @@ export function updateScoreDisplay(newScore) {
 export function updateTimeDisplay(newTime) {
   const timeBoard = document.getElementById('timeBoard');
   timeBoard.textContent = newTime; // Afficher directement le nombre
+}
+
+export function initInterface(canvas) {
+  currentInterval = null;
+  isCountdowning = false;
+
+  centerCountdown(canvas);
+  resetScoreAndTime(); // Initialiser le score et le temps à 0
+
+  showMessage("Bonjour, aventurier ! Prêt à explorer ce monde mystérieux ?");
+
+  setTimeout(() =>
+    showMessage("Appuie sur l'une des fleches pour commencer.\n \n \u2190\n \u2191\n \u2192\n \u2193"), 4000);
 }
 
 export function showMessage(message, speed = 50) {
@@ -42,26 +63,55 @@ export function showMessage(message, speed = 50) {
 }
 
 // Fonction pour centrer le décompte sur le canvas
-export function centerCountdown(canvas) {
-  const canvasRect = canvas.getBoundingClientRect(); // Obtenir les dimensions du canvas
-  countdownElement.style.left = `${canvasRect.left + canvas.width / 2}px`; // Centrer horizontalement
-  countdownElement.style.top = `${canvasRect.top + canvas.height / 2}px`; // Centrer verticalement
-  countdownElement.style.transform = "translate(-50%, -50%)"; // Ajuster le centrage
+function centerCountdown(canvas) {
+  // Obtenir les dimensions et la position du canvas par rapport à son conteneur
+  const canvasRect = canvas.getBoundingClientRect();
+  const containerRect = canvas.parentElement.getBoundingClientRect();
+
+  // Calculer la position relative du canvas dans son conteneur
+  const canvasTop = canvasRect.top - containerRect.top;
+
+  // Centrer verticalement le décompte sur le canvas
+  countdownElement.style.top = `${canvasTop + canvas.height/2}px`;
+  countdownElement.style.transform = "translate(-50%, -50%)";
 }
 
-export function startCountdown(ctx, canvas) {
-  let count = 3; // Commence à 3
-  countdownElement.style.display = "block"; // Affiche l'élément
+export function startCountdown() {
+  if (isCountdowning) return;
 
+  isCountdowning = true;
+
+  count = 3; // Commence à 3
   const intervalId = setInterval(() => {
     if (count === 0) {
       clearInterval(intervalId); // Arrête l'intervalle
       countdownElement.style.display = "none"; // Cache l'élément
-      callback(); // Exécute la fonction de rappel après le décompte
+
+      isCountdowning = false;
     } else {
       countdownElement.textContent = count; // Met à jour le chiffre
-      countdownElement.style.fontSize = `${100 + (3 - count) * 50}px`; // Fait grossir le chiffre
-      count--;
+      countdownElement.style.display = "block"; // Affiche l'élément
+      count -= 1;
     }
   }, 1000); // Intervalle de 1 seconde
+}
+
+export function insertMetallicSquare(ctx) {
+  // Configurer l'ombre
+  ctx.shadowColor = "rgba(100, 200, 200, 0.5)"; // Couleur de l'ombre
+  ctx.shadowBlur = 8; // Flou de l'ombre
+  ctx.shadowOffsetX = 3 ; // Décalage horizontal de l'ombre
+  ctx.shadowOffsetY = 5; // Décalage vertical de l'ombre
+
+  // Dessiner le rectangle rempli (avec transparence)
+  ctx.fillStyle = "rgba(10, 10, 230, 0.6)";
+  drawRoundedRect(ctx, 200, 200, 20, 20, 5)
+  drawRoundedRect(ctx, 220, 200, 20, 20, 5)
+  drawRoundedRect(ctx, 200, 220, 20, 20, 5)
+  drawRoundedRect(ctx, 220, 220, 20, 20, 5)
+
+  ctx.fillStyle = "black";
+
+  // Désactiver l'ombre pour les prochains rectangles à dessiner
+  ctx.shadowColor = "transparent";
 }

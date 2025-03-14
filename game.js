@@ -1,12 +1,21 @@
 import { initSnake, drawSnake, moveSnake } from './snake.js';
 import { initStars, initMilkyWay, initSquare, shineStars, drawSquare, drawMilkyWay } from './utils.js';
-import { resetScoreAndTime, startCount, stopCount } from './score.js';
-import { showMessage } from './ui.js';
+import { startCount, stopCount } from './score.js';
+import { showMessage, insertMetallicSquare } from './ui.js';
 
-let isGameRunning = false;
-let isPaused = false;
+let isGameRunning;
 let gameDelay;
+let isPaused = false;
 let gameIntervalId;
+let squareAcceleration = false;
+
+export function changeDelay(NewDelay) {
+  gameDelay = NewDelay
+}
+
+export function acceleration() {
+  squareAcceleration = true;
+}
 
 export function getPauseStatus() {
   return isPaused
@@ -35,10 +44,6 @@ export function initGame(ctx, canvas) {
   drawSnake(ctx);
   initSquare(ctx, canvas);
 
-  resetScoreAndTime(); // Initialiser le score et le temps à 0
-
-  setTimeout(() =>
-    showMessage("Appuie sur l'une des fleches pour commencer.\n \n \u2190\n \u2191\n \u2192\n \u2193"), 4000);
 
   // Lancer les fonctions toutes les 200 ms
   gameIntervalId = setInterval(() => {
@@ -47,11 +52,11 @@ export function initGame(ctx, canvas) {
       drawMilkyWay(ctx, canvas.width);
       drawSnake(ctx);
       drawSquare(ctx, canvas);
+      insertMetallicSquare(ctx);
     } else {
       clearInterval(gameIntervalId); // Arrêter l'intervalle si le jeu démarre
-      console.log("Intervalle arrêté, le jeu est en cours.");
     }
-  }, 200); // Exécuter toutes les 200 ms
+  }, 200);
 }
 
 // Fonction pour démarrer le jeu
@@ -83,7 +88,16 @@ export function gameLoop(ctx, canvas) {
   drawSnake(ctx);
   drawSquare(ctx, canvas);
 
-  setTimeout(() => gameLoop(ctx, canvas), gameDelay);
+  insertMetallicSquare(ctx);
+
+  if (squareAcceleration) {
+    squareAcceleration = false;
+    setTimeout(() => gameLoop(ctx, canvas), gameDelay/3);
+  }
+  else {
+    setTimeout(() => gameLoop(ctx, canvas), gameDelay);
+  }
+
 }
 
 export function togglePause(ctx, canvas) {
@@ -103,8 +117,4 @@ export function togglePause(ctx, canvas) {
 
       stopCount();
   }
-}
-
-export function changeDelay(NewDelay) {
-  gameDelay = NewDelay
 }

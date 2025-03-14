@@ -23,10 +23,9 @@ export function getDirectionY() {
 
 // Initialisation du serpent
 export function initSnake() {
-  const newColor = newRandomColor();
   snake = [
-    { x: 180, y: 180, color: newColor },
-    { x: 160, y: 180, color: newColor }
+    { x: 180, y: 180, color: newRandomColor() },
+    { x: 160, y: 180, color: newRandomColor() }
   ];
 }
 
@@ -89,7 +88,9 @@ export function moveSnake(ctx, canvas) {
 
     // Ne pas retirer la queue pour que le serpent grossisse
     setRandomX(0);
-    startCountdown(ctx, canvas)
+
+    // Lance un decompte avant d'envoyer un evenement
+    startCountdown()
 
   } else if (getGameRunning() === true) {
     const newHead = {

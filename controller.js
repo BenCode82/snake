@@ -1,6 +1,6 @@
-import { startGame, setGameRunning, restartGame, initGame, getGameRunning, getPauseStatus, togglePause} from './game.js';
+import { startGame, setGameRunning, restartGame, initGame, getGameRunning, getPauseStatus, togglePause, acceleration } from './game.js';
 import { setDirectionX, setDirectionY, getDirectionX, getDirectionY } from './snake.js';
-import { showMessage } from './ui.js';
+import { initInterface } from './ui.js';
 
 // Set up the canvas and context
 const canvas = document.getElementById('mainCanvas');
@@ -22,18 +22,30 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowUp' && getDirectionY() !== 20) {
       setDirectionX(0);
       setDirectionY(-20);
+      if (event.key === 'ArrowUp' && getDirectionY() === -20) {
+        acceleration();
+      }
     }
     else if (event.key === 'ArrowDown' && getDirectionY() !== -20) {
       setDirectionX(0);
       setDirectionY(20);
+      if (event.key === 'ArrowDown' && getDirectionY() === 20) {
+        acceleration();
+      }
     }
     else if (event.key === 'ArrowLeft' && getDirectionX() !== 20) {
       setDirectionX(-20);
       setDirectionY(0);
+      if (event.key === 'ArrowLeft' && getDirectionX() === -20) {
+        acceleration();
+      }
     }
     else if (event.key === 'ArrowRight' && getDirectionX() !== -20) {
       setDirectionX(20);
       setDirectionY(0);
+      if (event.key === 'ArrowRight' && getDirectionX() === 20) {
+        acceleration();
+      }
     }
 
     if (!getGameRunning() && !getPauseStatus()) {
@@ -50,12 +62,13 @@ document.addEventListener('keydown', (event) => {
     else {
       togglePause(ctx, canvas);
     }
-
   }
 });
 
-showMessage("Bonjour, aventurier ! Prêt à explorer ce monde mystérieux ?");
+// // OUTIL pour connaitre la position du pointeur !
+// document.addEventListener("mousemove", (event) => {
+//   console.log(`X: ${event.clientX}, Y: ${event.clientY}`);
+// });
 
-
-// initInterface();
+initInterface(canvas);
 initGame(ctx, canvas); // Initialiser le jeu
