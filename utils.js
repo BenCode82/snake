@@ -36,6 +36,13 @@ export function newRandomColor() {
   return `rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`;
 }
 
+export function newRandomColorA() {
+  let colors = [255, Math.floor(Math.random() * 128), Math.floor(Math.random() * 128)];
+  colors.sort(() => Math.random() - 0.5); // Mélanger les composantes
+
+  return `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, 0.3)`;
+}
+
 export function drawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y); // Coin supérieur gauche (départ)

@@ -19,7 +19,9 @@ export function getElements() {
 }
 
 export function clearElements() {
-  elementsToDraw = [];
+  while (elementsToDraw.length > 10) {
+    elementsToDraw.shift();
+  }
 }
 
 // Écouteur pour le bouton de réinitialisation
@@ -73,6 +75,8 @@ document.addEventListener('keydown', (event) => {
   // Mettre en pause ou reprendre le jeu
   if (event.code === 'Space') {
     if (!getGameRunning() && !getPauseStatus()) {
+      initUI(canvas);
+      initUtils();
       initGame(ctx, canvas);
     }
     else {

@@ -78,7 +78,7 @@ export function collisionDetected(canvasWidth, canvasHeight) {
 export function moveSnake(ctx, canvas) {
 
   if (collisionDetected(canvas.width, canvas.height) === true) {
-    // clearElements();
+    clearElements();
     invertColors(ctx);
 
     const newHead = {

@@ -1,5 +1,5 @@
 import { resetScoreAndTime } from './score.js';
-import { drawRoundedRect, moveSquare } from './utils.js';
+import { drawRoundedRect, moveSquare, newRandomColorA } from './utils.js';
 import { addElement, getElements } from './controller.js';
 
 const countdownElement = document.getElementById("countdown");
@@ -89,19 +89,21 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
 
       isCountdowning = false;
 
-      insertMetallicSquare(ctx, canvasWidth, canvasHeight,1);
+      if (Math.random() > 0.666) { // 1 chance sur 3
+        insertMetallicSquare(ctx, canvasWidth, canvasHeight, 2);
+      }
 
-      // Tableau contenant les fonctions
+      // Tableau contenant les fonctions "evenements"
       const events = [
         { func: moveSquare, args: [canvasWidth, canvasHeight] },
-        { func: insertMetallicSquare, args: [ctx, canvasWidth, canvasHeight, 3] }
+        { func: insertMetallicSquare, args: [ctx, canvasWidth, canvasHeight, Math.floor(Math.random() * 2)+2] } // dimension 2 ou 3
       ];
 
       // Sélection aléatoire d'un evenement
       const randomIndex = Math.floor(Math.random() * events.length);
       const selectedEvent = events[randomIndex];
       selectedEvent.func(...selectedEvent.args);
-      
+
     } else {
       countdownElement.textContent = count; // Met à jour le chiffre
       countdownElement.style.display = "block"; // Affiche l'élément
@@ -113,6 +115,7 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
 export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
   const xpos = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
   const ypos = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;
+  const newColor = newRandomColorA();
 
   const metallicSquare = {
     x: xpos,
@@ -125,7 +128,8 @@ export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
     shadowBlur: 8,
     shadowOffsetX: 3,
     shadowOffsetY: 5,
-    fillColor: "rgba(100, 100, 196, 0.6)",
+    // fillColor: "rgba(100, 100, 196, 0.5)",
+    fillColor: newColor,
     borderColor: "rgba(255, 255, 255, 0.6)", // Bordure claire pour l'effet de verre
     highlightColor: "rgba(255, 255, 255, 0.3)", // Reflet lumineux
     visible: true,
