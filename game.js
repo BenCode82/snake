@@ -1,7 +1,7 @@
 import { initSnake, drawSnake, moveSnake } from './snake.js';
 import { initStars, initMilkyWay, initSquare, shineStars, drawSquare, drawMilkyWay } from './utils.js';
 import { startCount, stopCount } from './score.js';
-import { showMessage, insertMetallicSquare } from './ui.js';
+import { showMessage, updateCanvas } from './ui.js';
 
 let isGameRunning;
 let gameDelay;
@@ -52,7 +52,6 @@ export function initGame(ctx, canvas) {
       drawMilkyWay(ctx, canvas.width);
       drawSnake(ctx);
       drawSquare(ctx, canvas);
-      insertMetallicSquare(ctx);
     } else {
       clearInterval(gameIntervalId); // Arrêter l'intervalle si le jeu démarre
     }
@@ -86,9 +85,9 @@ export function gameLoop(ctx, canvas) {
 
   moveSnake(ctx,canvas);
   drawSnake(ctx);
-  drawSquare(ctx, canvas);
 
-  insertMetallicSquare(ctx);
+  updateCanvas(ctx, canvas.width, canvas.height);
+  drawSquare(ctx, canvas);
 
   if (squareAcceleration) {
     squareAcceleration = false;
