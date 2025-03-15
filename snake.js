@@ -2,6 +2,7 @@ import { getGameRunning, endGame } from './game.js';
 import { newRandomColor, drawRoundedRect, getSquareColor, setRandomX, getRandomX, getRandomY } from './utils.js';
 import { addCollision } from './score.js';
 import { startCountdown } from './ui.js';
+import { clearElements } from './controller.js';
 
 
 export let snake = [];
@@ -77,6 +78,7 @@ export function collisionDetected(canvasWidth, canvasHeight) {
 export function moveSnake(ctx, canvas) {
 
   if (collisionDetected(canvas.width, canvas.height) === true) {
+    // clearElements();
     invertColors(ctx);
 
     const newHead = {
@@ -90,7 +92,7 @@ export function moveSnake(ctx, canvas) {
     setRandomX(0);
 
     // Lance un decompte avant d'envoyer un evenement
-    startCountdown(canvas.width, canvas.height)
+    startCountdown(ctx, canvas.width, canvas.height)
 
   } else if (getGameRunning() === true) {
     const newHead = {

@@ -1,10 +1,26 @@
 import { startGame, setGameRunning, restartGame, initGame, getGameRunning, getPauseStatus, togglePause, acceleration } from './game.js';
 import { setDirectionX, setDirectionY, getDirectionX, getDirectionY } from './snake.js';
-import { initInterface } from './ui.js';
+import { initUI } from './ui.js';
+import { initUtils } from './utils.js';
 
 // Set up the canvas and context
 const canvas = document.getElementById('mainCanvas');
 const ctx = canvas.getContext('2d');
+
+// Tableau des objets à afficher
+let elementsToDraw = [];
+
+export function addElement(element) {
+  elementsToDraw.push(element);
+}
+
+export function getElements() {
+  return elementsToDraw;
+}
+
+export function clearElements() {
+  elementsToDraw = [];
+}
 
 // Écouteur pour le bouton de réinitialisation
 document.addEventListener('DOMContentLoaded', () => {
@@ -70,5 +86,7 @@ document.addEventListener('keydown', (event) => {
 //   console.log(`X: ${event.clientX}, Y: ${event.clientY}`);
 // });
 
-initInterface(canvas);
-initGame(ctx, canvas); // Initialiser le jeu
+// Initialiser les variables du jeu
+initUI(canvas);
+initUtils();
+initGame(ctx, canvas);

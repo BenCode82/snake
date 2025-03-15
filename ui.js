@@ -1,5 +1,6 @@
 import { resetScoreAndTime } from './score.js';
 import { drawRoundedRect, moveSquare } from './utils.js';
+import { addElement, getElements } from './controller.js';
 
 const countdownElement = document.getElementById("countdown");
 countdownElement.style.display = "none";
@@ -19,7 +20,7 @@ export function updateTimeDisplay(newTime) {
   timeBoard.textContent = newTime; // Afficher directement le nombre
 }
 
-export function initInterface(canvas) {
+export function initUI(canvas) {
   currentInterval = null;
   isCountdowning = false;
 
@@ -76,7 +77,7 @@ function centerCountdown(canvas) {
   countdownElement.style.transform = "translate(-50%, -50%)";
 }
 
-export function startCountdown(canvasWidth, canvasHeight) {
+export function startCountdown(ctx, canvasWidth, canvasHeight) {
   if (isCountdowning) return;
 
   isCountdowning = true;
@@ -87,7 +88,20 @@ export function startCountdown(canvasWidth, canvasHeight) {
       countdownElement.style.display = "none"; // Cache l'élément
 
       isCountdowning = false;
-      moveSquare(canvasWidth, canvasHeight);
+
+      insertMetallicSquare(ctx, canvasWidth, canvasHeight,1);
+
+      // Tableau contenant les fonctions
+      const events = [
+        { func: moveSquare, args: [canvasWidth, canvasHeight] },
+        { func: insertMetallicSquare, args: [ctx, canvasWidth, canvasHeight, 3] }
+      ];
+
+      // Sélection aléatoire d'un evenement
+      const randomIndex = Math.floor(Math.random() * events.length);
+      const selectedEvent = events[randomIndex];
+      selectedEvent.func(...selectedEvent.args);
+      
     } else {
       countdownElement.textContent = count; // Met à jour le chiffre
       countdownElement.style.display = "block"; // Affiche l'élément
@@ -96,22 +110,86 @@ export function startCountdown(canvasWidth, canvasHeight) {
   }, 1000); // Intervalle de 1 seconde
 }
 
-export function insertMetallicSquare(ctx) {
-  // Configurer l'ombre
-  ctx.shadowColor = "rgba(100, 200, 200, 0.5)"; // Couleur de l'ombre
-  ctx.shadowBlur = 8; // Flou de l'ombre
-  ctx.shadowOffsetX = 3 ; // Décalage horizontal de l'ombre
-  ctx.shadowOffsetY = 5; // Décalage vertical de l'ombre
+export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
+  const xpos = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
+  const ypos = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;
 
-  // Dessiner le rectangle rempli (avec transparence)
-  ctx.fillStyle = "rgba(10, 10, 230, 0.6)";
-  drawRoundedRect(ctx, 200, 200, 20, 20, 5)
-  drawRoundedRect(ctx, 220, 200, 20, 20, 5)
-  drawRoundedRect(ctx, 200, 220, 20, 20, 5)
-  drawRoundedRect(ctx, 220, 220, 20, 20, 5)
+  const metallicSquare = {
+    x: xpos,
+    y: ypos,
+    dimension: dim,
+    size: 20,
+    spacing: 20,
+    radius: 5,
+    shadowColor: "rgba(100, 200, 200, 0.5)",
+    shadowBlur: 8,
+    shadowOffsetX: 3,
+    shadowOffsetY: 5,
+    fillColor: "rgba(100, 100, 196, 0.6)",
+    borderColor: "rgba(255, 255, 255, 0.6)", // Bordure claire pour l'effet de verre
+    highlightColor: "rgba(255, 255, 255, 0.3)", // Reflet lumineux
+    visible: true,
 
-  ctx.fillStyle = "black";
+    draw(ctx) {
+      if (!this.visible) return;
 
-  // Désactiver l'ombre pour les prochains rectangles à dessiner
-  ctx.shadowColor = "transparent";
+      // Sauvegarder l'état du contexte
+      ctx.save();
+
+      ctx.shadowColor = this.shadowColor;
+      ctx.shadowBlur = this.shadowBlur;
+      ctx.shadowOffsetX = this.shadowOffsetX;
+      ctx.shadowOffsetY = this.shadowOffsetY;
+
+      // ctx.shadowColor = "transparent";
+      // Dessiner les petits carrés avec un effet de verre
+      for (let i = 0; i < this.dimension; i++) {
+        for (let j = 0; j < this.dimension; j++) {
+          const x = this.x + i * this.spacing;
+          const y = this.y + j * this.spacing;
+
+          // Dessiner le fond transparent
+          ctx.fillStyle = this.fillColor;
+          drawRoundedRect(ctx, x, y, this.size, this.size, this.radius);
+
+          // Ajouter une bordure claire pour l'effet de verre
+          ctx.strokeStyle = this.borderColor;
+          ctx.lineWidth = 0.05;
+          ctx.stroke();
+
+          // // Ajouter un reflet lumineux (dégradé)
+          const gradient = ctx.createLinearGradient(x, y, x + this.size, y + this.size);
+          gradient.addColorStop(0, this.highlightColor);
+          gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+          ctx.fillStyle = gradient;
+        }
+      }
+      // Restaurer l'état du contexte
+      ctx.restore();
+    },
+  };
+
+  addElement(metallicSquare);
+}
+
+export function updateCanvas(ctx, canvasWidth, canvasHeight) {
+  const elements = getElements();
+
+  elements.forEach((element) => {
+    console.log((element.dimension * element.size));
+    if (Math.random() > 0.99) {
+      if (element.x < canvasHeight - (element.dimension * element.size)) { element.x += 20; }
+    }
+    else if (Math.random() > 0.98) {
+      if (element.x > 0 ) { element.x -= 20; }
+    }
+    else if (Math.random() > 0.97) {
+      if (element.y < canvasWidth - (element.dimension * element.size)) { element.y += 20; }
+    }
+    else if (Math.random() > 0.96) {
+      if (element.y > 0 ) { element.y -= 20; }
+    }
+
+    element.draw(ctx);
+  });
 }

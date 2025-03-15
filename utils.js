@@ -1,15 +1,17 @@
-export let randomX = 0;
-export let randomY = 0;
-let newX,newY;
-
-export let squareColor = '';
-export let colors = 0;
+let randomX,randomY,newX,newY;
+let stars,milkyStars;
+let squareColor = '';
 
 const starCount = 200;
 const milkyStarCount = 5000; // Nombre de points pour la Voie lactée
 
-const stars = [];
-const milkyStars = [];
+export function initUtils() {
+  randomX = 0;
+  randomY = 0;
+
+  stars = [];
+  milkyStars = [];
+}
 
 export function setRandomX(newValue) {
   randomX = newValue;
@@ -28,10 +30,9 @@ export function getSquareColor() {
 }
 
 export function newRandomColor() {
-  colors = [255, Math.floor(Math.random() * 128), Math.floor(Math.random() * 128)];
+  let colors = [255, Math.floor(Math.random() * 128), Math.floor(Math.random() * 128)];
   colors.sort(() => Math.random() - 0.5); // Mélanger les composantes
 
-  // console.log(`rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`)
   return `rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`;
 }
 
