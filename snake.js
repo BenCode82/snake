@@ -2,7 +2,7 @@ import { getGameRunning, endGame } from './game.js';
 import { newRandomColor, drawRoundedRect, getSquareColor, setRandomX, getRandomX, getRandomY } from './utils.js';
 import { addCollision } from './score.js';
 import { startCountdown } from './ui.js';
-import { clearElements } from './controller.js';
+import { clearObjects, getObjects } from './controller.js';
 
 
 export let snake = [];
@@ -45,6 +45,19 @@ export function collisionDetected(canvasWidth, canvasHeight) {
     }
   }
 
+  // Collision avec les objets
+  const head = snake[0]; // Tête du serpent
+  const metallicSquares = getObjects();
+  for (const object of metallicSquares) {
+
+    
+    // Vérifier si la tête du serpent est en collision avec ce metallicSquare
+    if (head.x === square.x && head.y === square.y) {
+      console.log('game over');
+      endGame();
+    }
+  }
+
   // Collision avec le carré
   if (directionX == 20) {
     if (snake[0].x === getRandomX()-20 && snake[0].y === getRandomY()) {
@@ -78,7 +91,7 @@ export function collisionDetected(canvasWidth, canvasHeight) {
 export function moveSnake(ctx, canvas) {
 
   if (collisionDetected(canvas.width, canvas.height) === true) {
-    clearElements();
+    clearObjects();
     invertColors(ctx);
 
     const newHead = {

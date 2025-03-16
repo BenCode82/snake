@@ -193,14 +193,17 @@ export function drawSquare(ctx, canvas) {
   else if (randomY < newY) { randomY += 20; }
 
   // Configurer l'ombre
-  ctx.shadowColor = "rgba(200, 200, 200, 0.5)"; // Couleur de l'ombre (noir semi-transparent)
-  ctx.shadowBlur = 10; // Flou de l'ombre
-  ctx.shadowOffsetX = 5; // Décalage horizontal de l'ombre
-  ctx.shadowOffsetY = 5; // Décalage vertical de l'ombre
+  ctx.shadowColor = "rgba(200, 200, 200, 0.3)"; // Couleur de l'ombre (noir semi-transparent)
+  ctx.shadowBlur = 20; // Flou de l'ombre
 
   squareColor = interpolateColor(squareColor, newRandomColor());
   ctx.fillStyle = squareColor;
-  drawRoundedRect(ctx, randomX, randomY, 20, 20, 5);
+
+  for (let i = 0; i < 5; i++) {
+    ctx.shadowOffsetX = Math.cos(i) * 5; // Décalage horizontal
+    ctx.shadowOffsetY = Math.sin(i) * 5; // Décalage vertical
+    drawRoundedRect(ctx, randomX, randomY, 20, 20, 5);
+  }
 
   // Désactiver l'ombre pour les prochains rectangles à dessiner
   ctx.shadowColor = "transparent";
