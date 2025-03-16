@@ -1,8 +1,7 @@
 import { updateScoreDisplay, updateTimeDisplay, showMessage} from './ui.js';
 import { changeDelay } from './game.js';
 
-let score = 0;
-let time = 0;
+let score,time;
 
 let isCounting = false;
 

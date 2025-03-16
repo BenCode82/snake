@@ -3,12 +3,35 @@ import { drawRoundedRect, moveSquare, newRandomColorA } from './utils.js';
 import { addObject, getObjects } from './controller.js';
 
 const countdownElement = document.getElementById("countdown");
-countdownElement.style.display = "none";
-countdownElement.style.fontSize = `200px`; // Taille des chiffres du decompte
 
-let currentInterval;
+let currentMessageInterval;
+let currentCountdownInterval;
 let isCountdowning;
 let count;
+
+export function initUI(canvas) {
+  currentMessageInterval = null;
+  currentCountdownInterval = null;
+  isCountdowning = false;
+
+  countdownElement.style.fontSize = `${canvas.height}px`;
+  countdownElement.style.display = "none";
+
+  centerCountdown(canvas);
+  resetScoreAndTime(); // Initialiser le score et le temps à 0
+
+  showMessage("Bonjour, aventurier ! Prêt à explorer ce monde mystérieux ?");
+
+  setTimeout(() =>
+    showMessage("Appuie sur l'une des fleches pour commencer.\n \n \u2190\n \u2191\n \u2192\n \u2193"), 4000);
+}
+
+export function stopCountdown() {
+  clearInterval(currentCountdownInterval);
+  currentCountdownInterval = null;
+  countdownElement.textContent = "";
+  isCountdowning = false;
+}
 
 export function updateScoreDisplay(newScore) {
   const scoreBoard = document.getElementById('scoreBoard');
@@ -20,19 +43,6 @@ export function updateTimeDisplay(newTime) {
   timeBoard.textContent = newTime; // Afficher directement le nombre
 }
 
-export function initUI(canvas) {
-  currentInterval = null;
-  isCountdowning = false;
-
-  centerCountdown(canvas);
-  resetScoreAndTime(); // Initialiser le score et le temps à 0
-
-  showMessage("Bonjour, aventurier ! Prêt à explorer ce monde mystérieux ?");
-
-  setTimeout(() =>
-    showMessage("Appuie sur l'une des fleches pour commencer.\n \n \u2190\n \u2191\n \u2192\n \u2193"), 4000);
-}
-
 export function showMessage(message, speed = 50) {
   const messageContent = document.getElementById('messageContent');
   const messageWindow = document.getElementById('messageWindow');
@@ -41,24 +51,24 @@ export function showMessage(message, speed = 50) {
   messageWindow.style.display = 'block';
 
   // Arrêter l'affichage du message en cours (s'il y en a un)
-  if (currentInterval) {
-    clearInterval(currentInterval);
-    currentInterval = null;
+  if (currentMessageInterval) {
+    clearInterval(currentMessageInterval);
+    currentMessageInterval = null;
   }
 
   // Réinitialiser le contenu
   messageContent.textContent = '';
 
   let index = 0;
-  currentInterval = setInterval(() => {
+  currentMessageInterval = setInterval(() => {
     if (index < message.length) {
       // Ajouter une lettre à la fois
       messageContent.textContent += message[index];
       index++;
     } else {
       // Arrêter l'animation
-      clearInterval(currentInterval);
-      currentInterval = null;
+      clearInterval(currentMessageInterval);
+      currentMessageInterval = null;
     }
   }, speed); // Vitesse d'affichage (en millisecondes)
 }
@@ -71,9 +81,11 @@ function centerCountdown(canvas) {
 
   // Calculer la position relative du canvas dans son conteneur
   const canvasTop = canvasRect.top - containerRect.top;
+  const canvasLeft = canvasRect.left - containerRect.left;
 
   // Centrer verticalement le décompte sur le canvas
   countdownElement.style.top = `${canvasTop + canvas.height/2}px`;
+  countdownElement.style.left = `${canvasLeft + canvas.width/2 - 270}px`;
   countdownElement.style.transform = "translate(-50%, -50%)";
 }
 
@@ -81,17 +93,14 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
   if (isCountdowning) return;
 
   isCountdowning = true;
-  count = 3; // Commence à 3
-  const intervalId = setInterval(() => {
+  count = Math.floor(Math.random()*3 + 3); // Commence à 3 avec entre 0 et 2 sec de delai
+  currentCountdownInterval = setInterval(() => {
     if (count === 0) {
-      clearInterval(intervalId); // Arrête l'intervalle
+      clearInterval(currentCountdownInterval); // Arrête l'intervalle
+      currentCountdownInterval = null;
+      countdownElement.textContent = "";
       countdownElement.style.display = "none"; // Cache l'élément
-
       isCountdowning = false;
-
-      if (Math.random() > 0.666) { // 1 chance sur 3
-        insertMetallicSquare(ctx, canvasWidth, canvasHeight, 2);
-      }
 
       // Tableau contenant les fonctions "evenements"
       const events = [
@@ -104,10 +113,17 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
       const selectedEvent = events[randomIndex];
       selectedEvent.func(...selectedEvent.args);
 
-    } else {
+    } else if (count < 4 && isCountdowning) {
       countdownElement.textContent = count; // Met à jour le chiffre
       countdownElement.style.display = "block"; // Affiche l'élément
       count -= 1;
+    } else if (count >= 4 && isCountdowning) {
+      countdownElement.textContent = "";
+      countdownElement.style.display = "none"; // Cache l'élément
+      count -= 1;
+    } else if (isCountdowning === false) {
+      countdownElement.textContent = "";
+      countdownElement.style.display = "none"; // Cache l'élément
     }
   }, 1000); // Intervalle de 1 seconde
 }
@@ -129,7 +145,6 @@ export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
     shadowBlur: 8,
     shadowOffsetX: 3,
     shadowOffsetY: 5,
-    // fillColor: "rgba(100, 100, 196, 0.5)",
     fillColor: newColor,
     borderColor: "rgba(255, 255, 255, 0.6)", // Bordure claire pour l'effet de verre
     highlightColor: "rgba(255, 255, 255, 0.3)", // Reflet lumineux
@@ -146,7 +161,6 @@ export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
       ctx.shadowOffsetX = this.shadowOffsetX;
       ctx.shadowOffsetY = this.shadowOffsetY;
 
-      // ctx.shadowColor = "transparent";
       // Dessiner les petits carrés avec un effet de verre
       for (let i = 0; i < this.dimension; i++) {
         for (let j = 0; j < this.dimension; j++) {
@@ -162,7 +176,7 @@ export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
           ctx.lineWidth = 0.05;
           ctx.stroke();
 
-          // // Ajouter un reflet lumineux (dégradé)
+          // Ajouter un reflet lumineux (dégradé)
           const gradient = ctx.createLinearGradient(x, y, x + this.size, y + this.size);
           gradient.addColorStop(0, this.highlightColor);
           gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
@@ -181,7 +195,6 @@ export function updateCanvas(ctx, canvasWidth, canvasHeight) {
   const objects = getObjects();
 
   objects.forEach((element) => {
-    console.log((element.dimension * element.size));
     if (Math.random() > 0.99) {
       if (element.x < canvasHeight - (element.dimension * element.size)) { element.x += 20; }
     }
