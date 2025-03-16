@@ -2,6 +2,7 @@ import { initSnake, drawSnake, moveSnake } from './snake.js';
 import { initStars, initMilkyWay, initSquare, shineStars, drawSquare, drawMilkyWay } from './utils.js';
 import { startCount, stopCount } from './score.js';
 import { showMessage, updateCanvas } from './ui.js';
+// import { explosion } from './explosion.js';
 
 let isGameRunning;
 let gameDelay;
@@ -71,6 +72,8 @@ export function endGame() {
 
   isGameRunning = false;
   stopCount(); // Arrête le compteur
+
+  // explosion();
 }
 
 export function restartGame(ctx, canvas) {

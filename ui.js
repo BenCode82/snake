@@ -1,6 +1,6 @@
 import { resetScoreAndTime } from './score.js';
 import { drawRoundedRect, moveSquare, newRandomColorA } from './utils.js';
-import { addElement, getElements } from './controller.js';
+import { addObject, getObjects } from './controller.js';
 
 const countdownElement = document.getElementById("countdown");
 countdownElement.style.display = "none";
@@ -121,6 +121,7 @@ export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
     x: xpos,
     y: ypos,
     dimension: dim,
+    dimensions : dim * 20,
     size: 20,
     spacing: 20,
     radius: 5,
@@ -173,13 +174,13 @@ export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
     },
   };
 
-  addElement(metallicSquare);
+  addObject(metallicSquare);
 }
 
 export function updateCanvas(ctx, canvasWidth, canvasHeight) {
-  const elements = getElements();
+  const objects = getObjects();
 
-  elements.forEach((element) => {
+  objects.forEach((element) => {
     console.log((element.dimension * element.size));
     if (Math.random() > 0.99) {
       if (element.x < canvasHeight - (element.dimension * element.size)) { element.x += 20; }

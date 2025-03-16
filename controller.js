@@ -8,19 +8,19 @@ const canvas = document.getElementById('mainCanvas');
 const ctx = canvas.getContext('2d');
 
 // Tableau des objets à afficher
-let elementsToDraw = [];
+let objects = [];
 
-export function addElement(element) {
-  elementsToDraw.push(element);
+export function addObject(object) {
+  objects.push(object);
 }
 
-export function getElements() {
-  return elementsToDraw;
+export function getObjects() {
+  return objects;
 }
 
-export function clearElements() {
-  while (elementsToDraw.length > 10) {
-    elementsToDraw.shift();
+export function clearObjects() {
+  while (objects.length > 10) {
+    objects.shift();
   }
 }
 
