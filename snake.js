@@ -1,8 +1,9 @@
 import { getGameRunning, endGame } from './game.js';
-import { newRandomColor, drawRoundedRect, getSquareColor, setRandomX, getRandomX, getRandomY } from './utils.js';
 import { addCollision } from './score.js';
 import { startCountdown, stopCountdown } from './ui.js';
 import { clearObjects } from './controller.js';
+import { getSquareColor, setSquarePosX, getSquarePosX, getSquarePosY } from './square.js';
+import { newRandomColor, drawRoundedRect } from './utils.js';
 
 export let snake = [];
 let directionX;
@@ -60,22 +61,22 @@ export function collisionDetected(canvasWidth, canvasHeight) {
 
   // Collision avec le carré
   if (directionX == 20) {
-    if (snake[0].x === getRandomX()-20 && snake[0].y === getRandomY()) {
+    if (snake[0].x === getSquarePosX()-20 && snake[0].y === getSquarePosY()) {
       return true;
     }
   }
   else if (directionX == -20) {
-    if (snake[0].x === getRandomX()+20 && snake[0].y === getRandomY()) {
+    if (snake[0].x === getSquarePosX()+20 && snake[0].y === getSquarePosY()) {
       return true;
     }
   }
   else if (directionY == 20) {
-    if (snake[0].x === getRandomX() && snake[0].y === getRandomY()-20) {
+    if (snake[0].x === getSquarePosX() && snake[0].y === getSquarePosY()-20) {
       return true;
     }
   }
   else if (directionY == -20) {
-    if (snake[0].x === getRandomX() && snake[0].y === getRandomY()+20) {
+    if (snake[0].x === getSquarePosX() && snake[0].y === getSquarePosY()+20) {
       return true;
     }
   }
@@ -103,7 +104,7 @@ export function moveSnake(ctx, canvas) {
     snake.unshift(newHead);
 
     // Ne pas retirer la queue pour que le serpent grossisse
-    setRandomX(0);
+    setSquarePosX(0);
 
     // Lance un decompte avant d'envoyer un evenement
     startCountdown(ctx, canvas.width, canvas.height);

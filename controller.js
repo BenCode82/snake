@@ -1,7 +1,8 @@
 import { startGame, setGameRunning, restartGame, initGame, getGameRunning, getPauseStatus, togglePause, acceleration } from './game.js';
 import { setDirectionX, setDirectionY, getDirectionX, getDirectionY } from './snake.js';
 import { initUI } from './ui.js';
-import { initUtils } from './utils.js';
+import { initBackdrop } from './backdrop.js';
+import { initSq } from './square.js';
 
 // Set up the canvas and context
 const canvas = document.getElementById('mainCanvas');
@@ -90,7 +91,9 @@ document.addEventListener('keydown', (event) => {
 //   console.log(`X: ${event.clientX}, Y: ${event.clientY}`);
 // });
 
+
 // Initialiser les variables du jeu
 initUI(canvas);
-initUtils();
+initBackdrop();
+initSq();
 initGame(ctx, canvas);

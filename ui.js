@@ -1,10 +1,11 @@
 import { resetScoreAndTime } from './score.js';
-import { drawRoundedRect, moveSquare, newRandomColorA, setSquareOpacity } from './utils.js';
 import { addObject, getObjects } from './controller.js';
+import { moveSquare, setSquareOpacity } from './square.js';
+import { newRandomColorA, drawRoundedRect } from './utils.js';
 
 const countdownElement = document.getElementById("countdown");
 
-let currentMessageInterval,currentCountdownInterval, disparitionInterval;
+let currentMessageInterval,currentCountdownInterval,disparitionInterval;
 let isCountdowning;
 
 export function initUI(canvas) {
@@ -110,9 +111,9 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
 
       // Tableau contenant les fonctions "evenements"
       const events = [
-        { func: moveSquare, args: [canvasWidth, canvasHeight] },
-        { func: insertMetallicSquare, args: [ctx, canvasWidth, canvasHeight, Math.floor(Math.random() * 2)+2] }, // dimension 2 ou 3
-        { func: opacitySquare, args: [] }
+        // { func: moveSquare, args: [canvasWidth, canvasHeight] },
+        { func: insertMetallicSquare, args: [ctx, canvasWidth, canvasHeight, Math.floor(Math.random() * 2)+2] } // dimension 2 ou 3
+        // { func: opacitySquare, args: [] },
         // { func: shiftSquare, args: [] }
       ];
 
@@ -228,8 +229,6 @@ function opacitySquare() {
     if (iteration === 0) {
       clearInterval(disparitionInterval); // Arrête l'intervalle
       disparitionInterval = null;
-
-      setSquareOpacity(1);
     }
     else if (iteration === 1) {
       setSquareOpacity(0.15);
@@ -249,15 +248,15 @@ function opacitySquare() {
   }, 1200); // Intervalle de 1 seconde
 }
 
-// function shiftSquare() {
-//   let iteration = 4;
-//   setSquareOpacity(0.8);
+function shiftSquare() {
+  let iteration = 4;
+  // setSquareOpacity(0.8);
 
-//   shiftInterval = setInterval(() => {
+  // shiftInterval = setInterval(() => {
 
 
-//   }, 1000); // Intervalle de 1 seconde
-// }
+  // }, 1000); // Intervalle de 1 seconde
+}
 
 // clearInterval(shiftInterval); // Arrête l'intervalle
 // shiftInterval = null;

@@ -1,7 +1,8 @@
 import { initSnake, drawSnake, moveSnake } from './snake.js';
-import { initStars, initMilkyWay, initSquare, shineStars, drawSquare, drawMilkyWay } from './utils.js';
+import { initStars, initMilkyWay, shineStars, drawMilkyWay } from './backdrop.js';
 import { startCount, stopCount } from './score.js';
 import { showMessage, updateCanvas } from './ui.js';
+import { initSquare, drawSquare } from './square.js';
 // import { explosion } from './explosion.js';
 
 let isGameRunning;
@@ -68,12 +69,10 @@ export function startGame(ctx, canvas) {
 }
 
 export function endGame() {
-  showMessage("GAME OVER !\n\nAppuie sur ESPACE pour reessayer !")
+  showMessage("GAME OVER !\n\nAppuie sur ESPACE pour rejouer !")
 
   isGameRunning = false;
   stopCount(); // Arrête le compteur
-
-  // explosion();
 }
 
 export function restartGame(ctx, canvas) {
