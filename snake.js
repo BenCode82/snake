@@ -2,7 +2,7 @@ import { getGameRunning, endGame } from './game.js';
 import { newRandomColor, drawRoundedRect, getSquareColor, setRandomX, getRandomX, getRandomY } from './utils.js';
 import { addCollision } from './score.js';
 import { startCountdown, stopCountdown } from './ui.js';
-import { clearObjects, getObjects } from './controller.js';
+import { clearObjects } from './controller.js';
 
 export let snake = [];
 let directionX;
@@ -61,25 +61,21 @@ export function collisionDetected(canvasWidth, canvasHeight) {
   // Collision avec le carré
   if (directionX == 20) {
     if (snake[0].x === getRandomX()-20 && snake[0].y === getRandomY()) {
-      addCollision();
       return true;
     }
   }
   else if (directionX == -20) {
     if (snake[0].x === getRandomX()+20 && snake[0].y === getRandomY()) {
-      addCollision();
       return true;
     }
   }
   else if (directionY == 20) {
     if (snake[0].x === getRandomX() && snake[0].y === getRandomY()-20) {
-      addCollision();
       return true;
     }
   }
   else if (directionY == -20) {
     if (snake[0].x === getRandomX() && snake[0].y === getRandomY()+20) {
-      addCollision();
       return true;
     }
   }
@@ -91,6 +87,9 @@ export function collisionDetected(canvasWidth, canvasHeight) {
 export function moveSnake(ctx, canvas) {
 
   if (collisionDetected(canvas.width, canvas.height) === true) {
+    console.log("Collision");
+    addCollision();
+
     clearObjects();
     invertColors(ctx);
 
@@ -132,25 +131,27 @@ export function moveSnake(ctx, canvas) {
 export function drawSnake(ctx) {
   snake.forEach(segment => {
     ctx.fillStyle = segment.color;
+
     drawRoundedRect(ctx, segment.x, segment.y, 20, 20, 5);
   });
 }
 
 function invertRGBColor(color) {
   // Extraire les valeurs r, g, b de la chaîne
-  const regex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
+  const regex = /rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)/;
   const match = color.match(regex);
 
   const r = parseInt(match[1], 10);
   const g = parseInt(match[2], 10);
   const b = parseInt(match[3], 10);
+  const o = parseInt(match[4], 10);
 
   // Inverser les couleurs
   const invertedR = 255 - r;
   const invertedG = 255 - g;
   const invertedB = 255 - b;
 
-  return `rgb(${invertedR}, ${invertedG}, ${invertedB})`;
+  return `rgba(${invertedR}, ${invertedG}, ${invertedB}, ${o})`;
 }
 
 function invertColors(ctx) {

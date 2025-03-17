@@ -1,17 +1,17 @@
 import { resetScoreAndTime } from './score.js';
-import { drawRoundedRect, moveSquare, newRandomColorA } from './utils.js';
+import { drawRoundedRect, moveSquare, newRandomColorA, setSquareOpacity } from './utils.js';
 import { addObject, getObjects } from './controller.js';
 
 const countdownElement = document.getElementById("countdown");
 
-let currentMessageInterval;
-let currentCountdownInterval;
+let currentMessageInterval,currentCountdownInterval, disparitionInterval;
 let isCountdowning;
-let count;
 
 export function initUI(canvas) {
   currentMessageInterval = null;
   currentCountdownInterval = null;
+  disparitionInterval = null;
+
   isCountdowning = false;
 
   countdownElement.style.fontSize = `${canvas.height}px`;
@@ -29,6 +29,12 @@ export function initUI(canvas) {
 export function stopCountdown() {
   clearInterval(currentCountdownInterval);
   currentCountdownInterval = null;
+
+  clearInterval(disparitionInterval);
+  disparitionInterval = null;
+
+  setSquareOpacity(1);
+
   countdownElement.textContent = "";
   isCountdowning = false;
 }
@@ -93,7 +99,7 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
   if (isCountdowning) return;
 
   isCountdowning = true;
-  count = Math.floor(Math.random()*3 + 3); // Commence à 3 avec entre 0 et 2 sec de delai
+  let count = Math.floor(Math.random()*3 + 3); // Commence à 3 avec entre 0 et 2 sec de delai
   currentCountdownInterval = setInterval(() => {
     if (count === 0) {
       clearInterval(currentCountdownInterval); // Arrête l'intervalle
@@ -105,13 +111,16 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
       // Tableau contenant les fonctions "evenements"
       const events = [
         { func: moveSquare, args: [canvasWidth, canvasHeight] },
-        { func: insertMetallicSquare, args: [ctx, canvasWidth, canvasHeight, Math.floor(Math.random() * 2)+2] } // dimension 2 ou 3
+        { func: insertMetallicSquare, args: [ctx, canvasWidth, canvasHeight, Math.floor(Math.random() * 2)+2] }, // dimension 2 ou 3
+        { func: opacitySquare, args: [] }
+        // { func: shiftSquare, args: [] }
       ];
 
       // Sélection aléatoire d'un evenement
       const randomIndex = Math.floor(Math.random() * events.length);
       const selectedEvent = events[randomIndex];
       selectedEvent.func(...selectedEvent.args);
+      // console.log("TEST apres le choix aleatoire d'un evenement   ")
 
     } else if (count < 4 && isCountdowning) {
       countdownElement.textContent = count; // Met à jour le chiffre
@@ -131,7 +140,6 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
 export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
   const xpos = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
   const ypos = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;
-  const newColor = newRandomColorA();
 
   const metallicSquare = {
     x: xpos,
@@ -145,7 +153,7 @@ export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
     shadowBlur: 8,
     shadowOffsetX: 3,
     shadowOffsetY: 5,
-    fillColor: newColor,
+    fillColor: newRandomColorA(0.3),
     borderColor: "rgba(255, 255, 255, 0.6)", // Bordure claire pour l'effet de verre
     highlightColor: "rgba(255, 255, 255, 0.3)", // Reflet lumineux
     visible: true,
@@ -211,3 +219,45 @@ export function updateCanvas(ctx, canvasWidth, canvasHeight) {
     element.draw(ctx);
   });
 }
+
+function opacitySquare() {
+  let iteration = 4;
+  setSquareOpacity(0.8);
+
+  disparitionInterval = setInterval(() => {
+    if (iteration === 0) {
+      clearInterval(disparitionInterval); // Arrête l'intervalle
+      disparitionInterval = null;
+
+      setSquareOpacity(1);
+    }
+    else if (iteration === 1) {
+      setSquareOpacity(0.15);
+      iteration -= 1;
+    }
+    else if (iteration === 2) {
+      setSquareOpacity(0.25);
+      iteration -= 1;
+    }
+    else if (iteration === 3) {
+      setSquareOpacity(0.6);
+      iteration -= 1;
+    }
+    else {
+      iteration -= 1;
+    }
+  }, 1200); // Intervalle de 1 seconde
+}
+
+// function shiftSquare() {
+//   let iteration = 4;
+//   setSquareOpacity(0.8);
+
+//   shiftInterval = setInterval(() => {
+
+
+//   }, 1000); // Intervalle de 1 seconde
+// }
+
+// clearInterval(shiftInterval); // Arrête l'intervalle
+// shiftInterval = null;

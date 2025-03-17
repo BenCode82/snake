@@ -1,6 +1,7 @@
 let randomX,randomY,newX,newY;
 let stars,milkyStars;
-let squareColor = '';
+
+let squareColor,squareOpacity;
 
 const starCount = 200;
 const milkyStarCount = 5000; // Nombre de points pour la Voie lactée
@@ -8,6 +9,9 @@ const milkyStarCount = 5000; // Nombre de points pour la Voie lactée
 export function initUtils() {
   randomX = 0;
   randomY = 0;
+
+  squareColor = '';
+  squareOpacity = 1;
 
   stars = [];
   milkyStars = [];
@@ -28,19 +32,22 @@ export function getRandomY() {
 export function getSquareColor() {
   return squareColor;
 }
+export function setSquareOpacity(opacityValue) {
+  squareOpacity = opacityValue;
+}
 
 export function newRandomColor() {
   let colors = [255, Math.floor(Math.random() * 128), Math.floor(Math.random() * 128)];
   colors.sort(() => Math.random() - 0.5); // Mélanger les composantes
 
-  return `rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`;
+  return `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, 1)`;
 }
 
-export function newRandomColorA() {
+export function newRandomColorA(newOpacity) {
   let colors = [255, Math.floor(Math.random() * 128), Math.floor(Math.random() * 128)];
   colors.sort(() => Math.random() - 0.5); // Mélanger les composantes
 
-  return `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, 0.3)`;
+  return `rgba(${colors[0]}, ${colors[1]}, ${colors[2]}, ${newOpacity})`;
 }
 
 export function drawRoundedRect(ctx, x, y, width, height, radius) {
@@ -158,7 +165,7 @@ export function initSquare(ctx, canvas) {
 }
 
 function interpolateColor(color1, color2) {
-  const regex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
+  const regex = /rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+.*)\)/;
   const match1 = color1.match(regex);
   const match2 = color2.match(regex);
 
@@ -174,7 +181,18 @@ function interpolateColor(color1, color2) {
   const g = Math.round((g1 + g2)/2);
   const b = Math.round((b1 + b2)/2);
 
-  return `rgb(${r}, ${g}, ${b})`;
+  squareColor = `rgba(${r}, ${g}, ${b}, 1)`;
+}
+
+function updateOpacity() {
+  const regex = /rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)/;
+  const match1 = squareColor.match(regex);
+
+  const r1 = parseInt(match1[1], 10);
+  const g1 = parseInt(match1[2], 10);
+  const b1 = parseInt(match1[3], 10);
+
+  squareColor = `rgba(${r1}, ${g1}, ${b1}, ${squareOpacity})`;
 }
 
 export function drawSquare(ctx, canvas) {
@@ -196,14 +214,16 @@ export function drawSquare(ctx, canvas) {
   ctx.shadowColor = "rgba(200, 200, 200, 0.3)"; // Couleur de l'ombre (noir semi-transparent)
   ctx.shadowBlur = 20; // Flou de l'ombre
 
-  squareColor = interpolateColor(squareColor, newRandomColor());
+  interpolateColor(squareColor, newRandomColor());
+  updateOpacity();
   ctx.fillStyle = squareColor;
 
-  for (let i = 0; i < 5; i++) {
-    ctx.shadowOffsetX = Math.cos(i) * 5; // Décalage horizontal
-    ctx.shadowOffsetY = Math.sin(i) * 5; // Décalage vertical
-    drawRoundedRect(ctx, randomX, randomY, 20, 20, 5);
-  }
+  // for (let i = 0; i < 5; i++) {
+  //   ctx.shadowOffsetX = Math.cos(i) * 5; // Décalage horizontal
+  //   ctx.shadowOffsetY = Math.sin(i) * 5; // Décalage vertical
+  //   drawRoundedRect(ctx, randomX, randomY, 20, 20, 5);
+  // }
+  drawRoundedRect(ctx, randomX, randomY, 20, 20, 5);
 
   // Désactiver l'ombre pour les prochains rectangles à dessiner
   ctx.shadowColor = "transparent";
