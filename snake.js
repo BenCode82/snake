@@ -1,7 +1,6 @@
 import { getGameRunning, endGame } from './game.js';
 import { addCollision } from './score.js';
 import { startCountdown, stopCountdown } from './ui.js';
-import { clearObjects } from './controller.js';
 import { getSquareColor, setSquarePosX, getSquarePosX, getSquarePosY } from './square.js';
 import { newRandomColor, drawRoundedRect } from './utils.js';
 
@@ -88,10 +87,9 @@ export function collisionDetected(canvasWidth, canvasHeight) {
 export function moveSnake(ctx, canvas) {
 
   if (collisionDetected(canvas.width, canvas.height) === true) {
-    console.log("Collision");
+    // console.log("Collision");
     addCollision();
 
-    clearObjects();
     invertColors(ctx);
 
     stopCountdown();

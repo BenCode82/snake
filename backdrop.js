@@ -3,12 +3,26 @@ let stars,milkyStars;
 const starCount = 200;
 const milkyStarCount = 5000; // Nombre de points pour la Voie lactée
 
-export function initBackdrop() {
+export function initBackdrop(ctx, canvasWidth, canvasHeight) {
   stars = [];
   milkyStars = [];
+
+  initStars(ctx, canvasWidth, canvasHeight);
+  initMilkyWay(canvasWidth, canvasHeight);
 }
 
-export function initStars(ctx, canvasWidth, canvasHeight) {
+export function drawBackdrop(ctx, canvasWidth, canvasHeight) {
+  // Efface le canvas avant de redessiner
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  // Remplir le fond en noir
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  shineStars(ctx, canvasWidth, canvasHeight);
+  drawMilkyWay(ctx, canvasWidth);
+}
+
+function initStars(ctx, canvasWidth, canvasHeight) {
   // Remplir le fond en noir
   ctx.fillStyle = "#000";
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
@@ -29,24 +43,7 @@ export function initStars(ctx, canvasWidth, canvasHeight) {
   }
 }
 
-export function shineStars(ctx, canvasWidth, canvasHeight) {
-  // Efface le canvas avant de redessiner
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-  // Remplir le fond en noir
-  ctx.fillStyle = "#000";
-  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-  // Redessine les etoiles
-  for (const star of stars) {
-    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity })`;
-    ctx.beginPath();
-    ctx.arc(star.x+(Math.random() * 2 - 1)*0.2, star.y+(Math.random() * 2 - 1)*0.2, star.radius + ((Math.random() * 2 - 1)*0.2), 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-
-export function initMilkyWay(ctx, canvasWidth, canvasHeight) {
+function initMilkyWay(canvasWidth, canvasHeight) {
   const minRadius = 0.5; // Rayon minimal des points
   const maxRadius = 1.5; // Rayon maximal des points
   const minOpacity = 0.1; // Opacité minimale
@@ -77,7 +74,17 @@ export function initMilkyWay(ctx, canvasWidth, canvasHeight) {
   }
 }
 
-export function drawMilkyWay(ctx, canvasWidth) {
+function shineStars(ctx, canvasWidth, canvasHeight) {
+  // Redessine les etoiles
+  for (const star of stars) {
+    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity })`;
+    ctx.beginPath();
+    ctx.arc(star.x+(Math.random() * 2 - 1)*0.2, star.y+(Math.random() * 2 - 1)*0.2, star.radius + ((Math.random() * 2 - 1)*0.2), 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawMilkyWay(ctx, canvasWidth) {
   for (const star of milkyStars) {
     // Mettre à jour la position x de l'étoile
     star.x += star.speed;

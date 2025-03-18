@@ -2,28 +2,13 @@ import { startGame, setGameRunning, restartGame, initGame, getGameRunning, getPa
 import { setDirectionX, setDirectionY, getDirectionX, getDirectionY } from './snake.js';
 import { initUI } from './ui.js';
 import { initBackdrop } from './backdrop.js';
-import { initSq } from './square.js';
+import { initSquareVariables } from './square.js';
+import { initObjects } from './objects.js';
+import { resetScoreAndTime } from './score.js';
 
 // Set up the canvas and context
 const canvas = document.getElementById('mainCanvas');
 const ctx = canvas.getContext('2d');
-
-// Tableau des objets à afficher
-let objects = [];
-
-export function addObject(object) {
-  objects.push(object);
-}
-
-export function getObjects() {
-  return objects;
-}
-
-export function clearObjects() {
-  while (objects.length > 10) {
-    objects.shift();
-  }
-}
 
 // Écouteur pour le bouton de réinitialisation
 document.addEventListener('DOMContentLoaded', () => {
@@ -91,9 +76,12 @@ document.addEventListener('keydown', (event) => {
 //   console.log(`X: ${event.clientX}, Y: ${event.clientY}`);
 // });
 
-
 // Initialiser les variables du jeu
 initUI(canvas);
-initBackdrop();
-initSq();
+resetScoreAndTime(); // Initialiser le score et le temps à 0
+
+initBackdrop(ctx, canvas.width, canvas.height);
+initSquareVariables();
+initObjects(ctx, canvas);
+
 initGame(ctx, canvas);

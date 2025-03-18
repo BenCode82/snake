@@ -1,8 +1,8 @@
-import { resetScoreAndTime } from './score.js';
-import { addObject, getObjects } from './controller.js';
-import { moveSquare, setSquareOpacity } from './square.js';
-import { newRandomColorA, drawRoundedRect } from './utils.js';
+import { moveSquare, setSquareOpacity, shiftSquare, clearShiftInterval } from './square.js';
+import { createObject } from './objects.js';
 
+const messageContent = document.getElementById('messageContent');
+const messageWindow = document.getElementById('messageWindow');
 const countdownElement = document.getElementById("countdown");
 
 let currentMessageInterval,currentCountdownInterval,disparitionInterval;
@@ -19,7 +19,6 @@ export function initUI(canvas) {
   countdownElement.style.display = "none";
 
   centerCountdown(canvas);
-  resetScoreAndTime(); // Initialiser le score et le temps à 0
 
   showMessage("Bonjour, aventurier ! Prêt à explorer ce monde mystérieux ?");
 
@@ -33,8 +32,9 @@ export function stopCountdown() {
 
   clearInterval(disparitionInterval);
   disparitionInterval = null;
-
   setSquareOpacity(1);
+
+  clearShiftInterval();
 
   countdownElement.textContent = "";
   isCountdowning = false;
@@ -50,11 +50,8 @@ export function updateTimeDisplay(newTime) {
   timeBoard.textContent = newTime; // Afficher directement le nombre
 }
 
-export function showMessage(message, speed = 50) {
-  const messageContent = document.getElementById('messageContent');
-  const messageWindow = document.getElementById('messageWindow');
-
-  // Afficher la fenêtre
+export function showMessage(message, speed = 40) {
+    // Afficher la fenêtre
   messageWindow.style.display = 'block';
 
   // Arrêter l'affichage du message en cours (s'il y en a un)
@@ -78,6 +75,13 @@ export function showMessage(message, speed = 50) {
       currentMessageInterval = null;
     }
   }, speed); // Vitesse d'affichage (en millisecondes)
+
+  setTimeout(() => {
+    clearInterval(currentMessageInterval);
+    currentMessageInterval = null;
+    messageContent.textContent = '';
+    // messageWindow.style.display = 'none';
+  }, 12000);
 }
 
 // Fonction pour centrer le décompte sur le canvas
@@ -112,16 +116,15 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
       // Tableau contenant les fonctions "evenements"
       const events = [
         // { func: moveSquare, args: [canvasWidth, canvasHeight] },
-        { func: insertMetallicSquare, args: [ctx, canvasWidth, canvasHeight, Math.floor(Math.random() * 2)+2] } // dimension 2 ou 3
+        { func: createObject, args: [ctx, canvasWidth, canvasHeight] }
         // { func: opacitySquare, args: [] },
-        // { func: shiftSquare, args: [] }
+        // { func: shiftSquare, args: [canvasWidth, canvasHeight] }
       ];
 
       // Sélection aléatoire d'un evenement
       const randomIndex = Math.floor(Math.random() * events.length);
       const selectedEvent = events[randomIndex];
       selectedEvent.func(...selectedEvent.args);
-      // console.log("TEST apres le choix aleatoire d'un evenement   ")
 
     } else if (count < 4 && isCountdowning) {
       countdownElement.textContent = count; // Met à jour le chiffre
@@ -138,107 +141,32 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
   }, 1000); // Intervalle de 1 seconde
 }
 
-export function insertMetallicSquare(ctx, canvasWidth, canvasHeight, dim) {
-  const xpos = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
-  const ypos = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;
-
-  const metallicSquare = {
-    x: xpos,
-    y: ypos,
-    dimension: dim,
-    dimensions : dim * 20,
-    size: 20,
-    spacing: 20,
-    radius: 5,
-    shadowColor: "rgba(100, 200, 200, 0.5)",
-    shadowBlur: 8,
-    shadowOffsetX: 3,
-    shadowOffsetY: 5,
-    fillColor: newRandomColorA(0.3),
-    borderColor: "rgba(255, 255, 255, 0.6)", // Bordure claire pour l'effet de verre
-    highlightColor: "rgba(255, 255, 255, 0.3)", // Reflet lumineux
-    visible: true,
-
-    draw(ctx) {
-      if (!this.visible) return;
-
-      // Sauvegarder l'état du contexte
-      ctx.save();
-
-      ctx.shadowColor = this.shadowColor;
-      ctx.shadowBlur = this.shadowBlur;
-      ctx.shadowOffsetX = this.shadowOffsetX;
-      ctx.shadowOffsetY = this.shadowOffsetY;
-
-      // Dessiner les petits carrés avec un effet de verre
-      for (let i = 0; i < this.dimension; i++) {
-        for (let j = 0; j < this.dimension; j++) {
-          const x = this.x + i * this.spacing;
-          const y = this.y + j * this.spacing;
-
-          // Dessiner le fond transparent
-          ctx.fillStyle = this.fillColor;
-          drawRoundedRect(ctx, x, y, this.size, this.size, this.radius);
-
-          // Ajouter une bordure claire pour l'effet de verre
-          ctx.strokeStyle = this.borderColor;
-          ctx.lineWidth = 0.05;
-          ctx.stroke();
-
-          // Ajouter un reflet lumineux (dégradé)
-          const gradient = ctx.createLinearGradient(x, y, x + this.size, y + this.size);
-          gradient.addColorStop(0, this.highlightColor);
-          gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-          ctx.fillStyle = gradient;
-        }
-      }
-      // Restaurer l'état du contexte
-      ctx.restore();
-    },
-  };
-
-  addObject(metallicSquare);
-}
-
-export function updateCanvas(ctx, canvasWidth, canvasHeight) {
-  const objects = getObjects();
-
-  objects.forEach((element) => {
-    if (Math.random() > 0.99) {
-      if (element.x < canvasHeight - (element.dimension * element.size)) { element.x += 20; }
-    }
-    else if (Math.random() > 0.98) {
-      if (element.x > 0 ) { element.x -= 20; }
-    }
-    else if (Math.random() > 0.97) {
-      if (element.y < canvasWidth - (element.dimension * element.size)) { element.y += 20; }
-    }
-    else if (Math.random() > 0.96) {
-      if (element.y > 0 ) { element.y -= 20; }
-    }
-
-    element.draw(ctx);
-  });
-}
-
 function opacitySquare() {
-  let iteration = 4;
+  let iteration = 8;
   setSquareOpacity(0.8);
 
   disparitionInterval = setInterval(() => {
     if (iteration === 0) {
       clearInterval(disparitionInterval); // Arrête l'intervalle
       disparitionInterval = null;
+
+      setSquareOpacity(1);
     }
-    else if (iteration === 1) {
-      setSquareOpacity(0.15);
+    else if (iteration < 5) {
+      setSquareOpacity(0);
       iteration -= 1;
     }
-    else if (iteration === 2) {
+    else if (iteration === 5) {
+      setSquareOpacity(0.15);
+      showMessage("Ou suis-je ?\n\n👀");
+
+      iteration -= 1;
+    }
+    else if (iteration === 6) {
       setSquareOpacity(0.25);
       iteration -= 1;
     }
-    else if (iteration === 3) {
+    else if (iteration === 8) {
       setSquareOpacity(0.6);
       iteration -= 1;
     }
@@ -247,16 +175,3 @@ function opacitySquare() {
     }
   }, 1200); // Intervalle de 1 seconde
 }
-
-function shiftSquare() {
-  let iteration = 4;
-  // setSquareOpacity(0.8);
-
-  // shiftInterval = setInterval(() => {
-
-
-  // }, 1000); // Intervalle de 1 seconde
-}
-
-// clearInterval(shiftInterval); // Arrête l'intervalle
-// shiftInterval = null;

@@ -1,9 +1,9 @@
 import { initSnake, drawSnake, moveSnake } from './snake.js';
-import { initStars, initMilkyWay, shineStars, drawMilkyWay } from './backdrop.js';
 import { startCount, stopCount } from './score.js';
-import { showMessage, updateCanvas } from './ui.js';
+import { showMessage} from './ui.js';
 import { initSquare, drawSquare } from './square.js';
-// import { explosion } from './explosion.js';
+import { drawBackdrop } from './backdrop.js';
+import { moveObjects } from './objects.js';
 
 let isGameRunning;
 let gameDelay;
@@ -37,21 +37,16 @@ export function initGame(ctx, canvas) {
   isGameRunning = false;
   gameDelay = 200;
 
-  // Initialiser le fond
-  initStars(ctx, canvas.width, canvas.height);
-  initMilkyWay(ctx, canvas.width, canvas.height);
-
   // Initialiser le serpent
   initSnake();
   drawSnake(ctx);
   initSquare(ctx, canvas);
 
-
   // Lancer les fonctions toutes les 200 ms
   gameIntervalId = setInterval(() => {
     if (!isGameRunning) {
-      shineStars(ctx, canvas.width, canvas.height);
-      drawMilkyWay(ctx, canvas.width);
+      drawBackdrop(ctx, canvas.width, canvas.height);
+
       drawSnake(ctx);
       drawSquare(ctx, canvas);
     } else {
@@ -60,7 +55,6 @@ export function initGame(ctx, canvas) {
   }, 200);
 }
 
-// Fonction pour démarrer le jeu
 export function startGame(ctx, canvas) {
   showMessage("Le jeu démarre.\nBonne Chance !");
 
@@ -82,14 +76,13 @@ export function restartGame(ctx, canvas) {
 export function gameLoop(ctx, canvas) {
   if (!isGameRunning) return;
 
-  shineStars(ctx, canvas.width, canvas.height);
-  drawMilkyWay(ctx, canvas.width);
+  drawBackdrop(ctx, canvas.width, canvas.height);
 
   moveSnake(ctx,canvas);
   drawSnake(ctx);
-
-  updateCanvas(ctx, canvas.width, canvas.height);
   drawSquare(ctx, canvas);
+
+  moveObjects(ctx, canvas.width, canvas.height);
 
   if (squareAcceleration) {
     squareAcceleration = false;
@@ -98,7 +91,6 @@ export function gameLoop(ctx, canvas) {
   else {
     setTimeout(() => gameLoop(ctx, canvas), gameDelay);
   }
-
 }
 
 export function togglePause(ctx, canvas) {

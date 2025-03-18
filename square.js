@@ -1,14 +1,19 @@
 import { newRandomColor, drawRoundedRect, interpolateColor } from './utils.js';
+import { showMessage } from './ui.js';
 
 let squarePosX,squarePosY,newPosX,newPosY;
 let squareColor,squareOpacity;
 
-export function initSq() {
+let shiftInterval;
+
+export function initSquareVariables() {
   squarePosX = 0;
   squarePosY = 0;
 
   squareColor = '';
   squareOpacity = 1;
+
+  shiftInterval = null;
 }
 
 export function setSquarePosX(newValue) {
@@ -28,6 +33,11 @@ export function getSquareColor() {
 }
 export function setSquareOpacity(opacityValue) {
   squareOpacity = opacityValue;
+}
+
+export function clearShiftInterval() {
+  clearInterval(shiftInterval);
+  shiftInterval = null;
 }
 
 function updateOpacity() {
@@ -90,4 +100,35 @@ export function drawSquare(ctx, canvas) {
 export function moveSquare(canvasWidth, canvasHeight) {
   newPosX = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
   newPosY = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;
+}
+
+export function shiftSquare(canvasWidth, canvasHeight) {
+  let iteration = 40;
+
+  showMessage("OOOhhhhHHH, ça bouge.............");
+
+  shiftInterval = setInterval(() => {
+    if (iteration === 0) {
+      clearInterval(shiftInterval); // Arrête l'intervalle
+      shiftInterval = null;
+    }
+    else if (iteration > 0) {
+      const aleajactaest = Math.random();
+
+      if (aleajactaest > 0.8 && newPosX < canvasWidth) {
+        newPosX += 20;
+      }
+      else if (aleajactaest > 0.4 && newPosX > 0) {
+        newPosX -= 20;
+      }
+      else if (aleajactaest > 0.6 && newPosY < canvasHeight) {
+        newPosY += 20;
+      }
+      else if (aleajactaest > 0.2 && newPosY > 0) {
+      newPosY -= 20;
+      }
+
+      iteration -= 1;
+    }
+  }, 300);
 }

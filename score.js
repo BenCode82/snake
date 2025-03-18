@@ -52,7 +52,6 @@ async function asyncTimeCounter() {
 
     if (score > 8000 && !messageSent8000) {
       changeDelay(70);
-      showMessage("Tu entres dans le couloir de la mort. \nBonne chance \n \n 💀💀💀");
       messageSent8000 = true;
     }
     else if (score > 6000 && !messageSent6000) {
@@ -62,32 +61,27 @@ async function asyncTimeCounter() {
     }
     else if (score > 4500 && !messageSent4500) {
       changeDelay(90);
-      showMessage("Tu entres dans le couloir de la mort. \nBonne chance \n \n 💀💀💀");
       messageSent4500 = true;
     }
     else if (score > 3500 && !messageSent3500) {
       changeDelay(100);
-      showMessage("Tu es bon...\non accelere !");
       messageSent3500 = true;
     }
     else if (score > 2800 && !messageSent2800) {
       changeDelay(110);
-      showMessage("Tu es bon...\non accelere !");
       messageSent2800 = true;
     }
     else if (score > 2200 && !messageSent2200) {
       changeDelay(120);
-      showMessage("Tu es bon...\non accelere !");
+      showMessage("Allons un peu plus vite !");
       messageSent2200 = true;
     }
     else if (score > 1800 && !messageSent1800) {
       changeDelay(130);
-      showMessage("Tu es bon...\non accelere !");
       messageSent1800 = true;
     }
     else if (score > 1400 && !messageSent1400) {
       changeDelay(140);
-      showMessage("Tu es bon...\non accelere !");
       messageSent1400 = true;
     }
     else if (score > 1000 && !messageSent1000) {
@@ -97,12 +91,10 @@ async function asyncTimeCounter() {
     }
     else if (score > 600 && !messageSent600) {
       changeDelay(160);
-      showMessage("Tu es bon...\non accelere !");
       messageSent600 = true;
     }
     else if (score > 300 && !messageSent300) {
       changeDelay(180);
-      showMessage("Tu es bon...\non accelere !");
       messageSent300 = true;
      }
   }
