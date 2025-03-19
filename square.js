@@ -1,5 +1,6 @@
 import { newRandomColor, drawRoundedRect, interpolateColor } from './utils.js';
 import { showMessage } from './ui.js';
+import { isCollidingObject } from './objects.js';
 
 let squarePosX,squarePosY,newPosX,newPosY;
 let squareColor,squareOpacity;
@@ -10,7 +11,7 @@ export function initSquareVariables() {
   squarePosX = 0;
   squarePosY = 0;
 
-  squareColor = '';
+  squareColor = newRandomColor();
   squareOpacity = 1;
 
   shiftInterval = null;
@@ -51,32 +52,33 @@ function updateOpacity() {
   squareColor = `rgba(${r1}, ${g1}, ${b1}, ${squareOpacity})`;
 }
 
-export function initSquare(ctx, canvas) {
+export function drawSquare(ctx, canvasWidth, canvasHeight) {
   if (squarePosX === 0) {
-    squarePosX = (Math.floor(Math.random() * ((canvas.width - 40) / 20)) * 20) + 20;
-    squarePosY = (Math.floor(Math.random() * ((canvas.height - 40) / 20)) * 20) + 20;
+    squarePosX = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
+    squarePosY = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;
 
-    squareColor = newRandomColor();
-  }
-
-  ctx.fillStyle = squareColor;
-  drawRoundedRect(ctx, squarePosX, squarePosY, 20, 20, 5);
-}
-
-export function drawSquare(ctx, canvas) {
-  if (squarePosX === 0) {
-    squarePosX = (Math.floor(Math.random() * ((canvas.width - 40) / 20)) * 20) + 20;
-    squarePosY = (Math.floor(Math.random() * ((canvas.height - 40) / 20)) * 20) + 20;
+    while (isCollidingObject(squarePosX, squarePosY, 20)) {
+      squarePosX = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
+      squarePosY = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;
+    }
 
     newPosX = squarePosX
     newPosY = squarePosY
   }
 
-  if (squarePosX > newPosX) { squarePosX -= 20; }
-  else if (squarePosX < newPosX) { squarePosX += 20; }
+  if (squarePosX > newPosX) {
+    squarePosX -= 20;
+  }
+  else if (squarePosX < newPosX) {
+    squarePosX += 20;
+  }
 
-  if (squarePosY > newPosY) { squarePosY -= 20; }
-  else if (squarePosY < newPosY) { squarePosY += 20; }
+  if (squarePosY > newPosY) {
+    squarePosY -= 20;
+  }
+  else if (squarePosY < newPosY) {
+    squarePosY += 20;
+  }
 
   // Configurer l'ombre
   ctx.shadowColor = "rgba(200, 200, 200, 0.3)"; // Couleur de l'ombre (noir semi-transparent)
@@ -100,6 +102,11 @@ export function drawSquare(ctx, canvas) {
 export function moveSquare(canvasWidth, canvasHeight) {
   newPosX = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
   newPosY = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;
+
+  while (isCollidingObject(newPosX, newPosY, 20)) {
+    newPosX = (Math.floor(Math.random() * ((canvas.width - 40) / 20)) * 20) + 20;
+    newPosY = (Math.floor(Math.random() * ((canvas.height - 40) / 20)) * 20) + 20;
+  }
 }
 
 export function shiftSquare(canvasWidth, canvasHeight) {
@@ -115,20 +122,32 @@ export function shiftSquare(canvasWidth, canvasHeight) {
     else if (iteration > 0) {
       const aleajactaest = Math.random();
 
-      if (aleajactaest > 0.8 && newPosX < canvasWidth) {
+      if (aleajactaest > 0.8 && newPosX < canvasWidth && !isCollidingObject(squarePosX + 20, squarePosY, 20)) {
         newPosX += 20;
       }
-      else if (aleajactaest > 0.4 && newPosX > 0) {
+      else if (aleajactaest > 0.4 && newPosX > 0  && !isCollidingObject(squarePosX - 20, squarePosY, 20)) {
         newPosX -= 20;
       }
-      else if (aleajactaest > 0.6 && newPosY < canvasHeight) {
+      else if (aleajactaest > 0.6 && newPosY < canvasHeight && !isCollidingObject(squarePosX, squarePosY + 20, 20)) {
         newPosY += 20;
       }
-      else if (aleajactaest > 0.2 && newPosY > 0) {
-      newPosY -= 20;
+      else if (aleajactaest > 0.2 && newPosY > 0  && !isCollidingObject(squarePosX, squarePosY -20, 20)) {
+        newPosY -= 20;
       }
 
       iteration -= 1;
     }
   }, 300);
+}
+
+export function isCollidingSquare(x, y, dimensions) {
+  if (
+    squarePosX < x + dimensions &&
+    squarePosX + 20 > x &&
+    squarePosY < y + dimensions &&
+    squarePosY + 20 > y
+  ) {
+    return true; // Collision détectée
+  }
+  return false; // Pas de collision
 }

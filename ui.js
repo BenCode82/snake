@@ -1,5 +1,7 @@
 import { moveSquare, setSquareOpacity, shiftSquare, clearShiftInterval } from './square.js';
 import { createObject } from './objects.js';
+import { getGameRunning } from './game.js';
+import { resizeCanvas } from './controller.js';
 
 const messageContent = document.getElementById('messageContent');
 const messageWindow = document.getElementById('messageWindow');
@@ -77,10 +79,12 @@ export function showMessage(message, speed = 40) {
   }, speed); // Vitesse d'affichage (en millisecondes)
 
   setTimeout(() => {
-    clearInterval(currentMessageInterval);
-    currentMessageInterval = null;
-    messageContent.textContent = '';
-    // messageWindow.style.display = 'none';
+    if(getGameRunning()) {
+      clearInterval(currentMessageInterval);
+      currentMessageInterval = null;
+      messageContent.textContent = '';
+      // messageWindow.style.display = 'none';
+    }
   }, 12000);
 }
 
@@ -104,37 +108,45 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
   if (isCountdowning) return;
 
   isCountdowning = true;
-  let count = Math.floor(Math.random()*3 + 3); // Commence à 3 avec entre 0 et 2 sec de delai
+  let count = Math.floor(Math.random()*3 + 1); // Commence à 3 avec entre 0 et 2 sec de delai
   currentCountdownInterval = setInterval(() => {
-    if (count === 0) {
-      clearInterval(currentCountdownInterval); // Arrête l'intervalle
-      currentCountdownInterval = null;
-      countdownElement.textContent = "";
-      countdownElement.style.display = "none"; // Cache l'élément
-      isCountdowning = false;
+    if (getGameRunning()) {
+      if (count === 0) {
+        clearInterval(currentCountdownInterval); // Arrête l'intervalle
+        currentCountdownInterval = null;
+        countdownElement.textContent = "";
+        countdownElement.style.display = "none"; // Cache l'élément
+        isCountdowning = false;
 
-      // Tableau contenant les fonctions "evenements"
-      const events = [
-        // { func: moveSquare, args: [canvasWidth, canvasHeight] },
-        { func: createObject, args: [ctx, canvasWidth, canvasHeight] }
-        // { func: opacitySquare, args: [] },
-        // { func: shiftSquare, args: [canvasWidth, canvasHeight] }
-      ];
+        // Tableau contenant les fonctions "evenements"
+        const events = [
+          { func: moveSquare, args: [canvasWidth, canvasHeight] },
+          { func: opacitySquare, args: [] },
+          { func: shiftSquare, args: [canvasWidth, canvasHeight] },
+          { func: resizeCanvas, args: [] }
+        ];
 
-      // Sélection aléatoire d'un evenement
-      const randomIndex = Math.floor(Math.random() * events.length);
-      const selectedEvent = events[randomIndex];
-      selectedEvent.func(...selectedEvent.args);
+        // Sélection aléatoire d'un evenement
+        const randomIndex = Math.floor(Math.random() * events.length);
+        const selectedEvent = events[randomIndex];
+        selectedEvent.func(...selectedEvent.args);
+        createObject(ctx, canvasWidth, canvasHeight);
 
-    } else if (count < 4 && isCountdowning) {
-      countdownElement.textContent = count; // Met à jour le chiffre
-      countdownElement.style.display = "block"; // Affiche l'élément
-      count -= 1;
-    } else if (count >= 4 && isCountdowning) {
-      countdownElement.textContent = "";
-      countdownElement.style.display = "none"; // Cache l'élément
-      count -= 1;
-    } else if (isCountdowning === false) {
+      } else if (count < 4 && isCountdowning) {
+        countdownElement.textContent = count; // Met à jour le chiffre
+        countdownElement.style.display = "block"; // Affiche l'élément
+        count -= 1;
+        if (count == 2 && Math.random() > 0.8) { showMessage("Vite !\n\n........");; }
+      } else if (count >= 4 && isCountdowning) {
+        countdownElement.textContent = "";
+        countdownElement.style.display = "none"; // Cache l'élément
+        count -= 1;
+      } else if (isCountdowning === false) {
+        countdownElement.textContent = "";
+        countdownElement.style.display = "none"; // Cache l'élément
+      }
+    }
+    else {
       countdownElement.textContent = "";
       countdownElement.style.display = "none"; // Cache l'élément
     }

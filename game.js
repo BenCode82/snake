@@ -1,15 +1,17 @@
 import { initSnake, drawSnake, moveSnake } from './snake.js';
 import { startCount, stopCount } from './score.js';
-import { showMessage} from './ui.js';
-import { initSquare, drawSquare } from './square.js';
+import { showMessage, stopCountdown } from './ui.js';
+import { drawSquare } from './square.js';
 import { drawBackdrop } from './backdrop.js';
-import { moveObjects } from './objects.js';
+import { moveObjects, createObject } from './objects.js';
 
 let isGameRunning;
 let gameDelay;
 let isPaused = false;
 let gameIntervalId;
 let squareAcceleration = false;
+
+let countdownElement
 
 export function changeDelay(NewDelay) {
   gameDelay = NewDelay
@@ -39,16 +41,20 @@ export function initGame(ctx, canvas) {
 
   // Initialiser le serpent
   initSnake();
-  drawSnake(ctx);
-  initSquare(ctx, canvas);
+
+  let i = 0;
+  while (i < 2) {
+    createObject(ctx, canvas.width, canvas.height);
+    i += 1;
+  }
 
   // Lancer les fonctions toutes les 200 ms
   gameIntervalId = setInterval(() => {
     if (!isGameRunning) {
       drawBackdrop(ctx, canvas.width, canvas.height);
-
       drawSnake(ctx);
-      drawSquare(ctx, canvas);
+      drawSquare(ctx, canvas.width, canvas.height);
+      moveObjects(ctx, canvas.width, canvas.height);
     } else {
       clearInterval(gameIntervalId); // Arrêter l'intervalle si le jeu démarre
     }
@@ -63,10 +69,32 @@ export function startGame(ctx, canvas) {
 }
 
 export function endGame() {
-  showMessage("GAME OVER !\n\nAppuie sur ESPACE pour rejouer !")
+  console.log('game over');
+
+  if (isGameRunning) {
+    countdownElement = document.getElementById("countdown");
+    // Afficher "GAME OVER"
+    setTimeout(() => {
+      countdownElement.textContent = "GAME OVER";
+      countdownElement.style.display = "block";
+    }, 0);
+
+    // Arrêter le compteur et le compte à rebours
+    stopCount();
+    stopCountdown();
+
+    // Afficher un message pour rejouer
+    showMessage("Appuie sur ESPACE pour rejouer !");
+
+    // Mettre à jour l'état du jeu
+    isGameRunning = false;
+  }
 
   isGameRunning = false;
-  stopCount(); // Arrête le compteur
+  setTimeout(() => {
+    countdownElement.textContent = "";
+    countdownElement.style.display = "none";
+  }, 1000);
 }
 
 export function restartGame(ctx, canvas) {
@@ -80,7 +108,7 @@ export function gameLoop(ctx, canvas) {
 
   moveSnake(ctx,canvas);
   drawSnake(ctx);
-  drawSquare(ctx, canvas);
+  drawSquare(ctx, canvas.width, canvas.height);
 
   moveObjects(ctx, canvas.width, canvas.height);
 
@@ -98,7 +126,7 @@ export function togglePause(ctx, canvas) {
       // Reprendre le jeu
       isPaused = false;
       showMessage("Le jeu reprend !");
-      setGameRunning(true); // Relancer le jeu
+      isGameRunning = true; // Relancer le jeu
       startCount();
 
       gameLoop(ctx, canvas);
@@ -106,7 +134,7 @@ export function togglePause(ctx, canvas) {
       // Mettre en pause le jeu
       isPaused = true;
       showMessage('Jeu en pause.\n\nAppuie sur ESPACE pour reprendre !');
-      setGameRunning(false); // Arrêter le jeu
+      isGameRunning = false; // Arrêter le jeu
 
       stopCount();
   }
