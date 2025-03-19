@@ -3,25 +3,39 @@ import { changeDelay } from './game.js';
 
 let score,time;
 
-let isCounting = false;
+let isCounting;
 
-let messageSent8000 = false;
-let messageSent6000 = false;
-let messageSent4500 = false;
-let messageSent3500 = false;
-let messageSent2800 = false;
-let messageSent2200 = false;
-let messageSent1800 = false;
-let messageSent1400 = false;
-let messageSent1000 = false;
-let messageSent600 = false;
-let messageSent300 = false;
+let messageSent8000;
+let messageSent6000;
+let messageSent4500;
+let messageSent3500;
+let messageSent2800;
+let messageSent2200;
+let messageSent1800;
+let messageSent1400;
+let messageSent1000;
+let messageSent600;
+let messageSent300;
 
 export function getScore() {
   return score;
 }
 
-export function resetScoreAndTime() {
+export function initScoreAndTime() {
+  isCounting = false;
+
+  messageSent8000 = false;
+  messageSent6000 = false;
+  messageSent4500 = false;
+  messageSent3500 = false;
+  messageSent2800 = false;
+  messageSent2200 = false;
+  messageSent1800 = false;
+  messageSent1400 = false;
+  messageSent1000 = false;
+  messageSent600 = false;
+  messageSent300 = false;
+
   score = 0;
   time = 0;
   updateScoreDisplay(score);

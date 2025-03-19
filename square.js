@@ -88,11 +88,11 @@ export function drawSquare(ctx, canvasWidth, canvasHeight) {
   updateOpacity();
   ctx.fillStyle = squareColor;
 
-  // for (let i = 0; i < 5; i++) {
-  //   ctx.shadowOffsetX = Math.cos(i) * 5; // Décalage horizontal
-  //   ctx.shadowOffsetY = Math.sin(i) * 5; // Décalage vertical
-  //   drawRoundedRect(ctx, squarePosX, squarePosY, 20, 20, 5);
-  // }
+  for (let i = 0; i < 5; i++) {
+    ctx.shadowOffsetX = Math.cos(i) * 5; // Décalage horizontal
+    ctx.shadowOffsetY = Math.sin(i) * 5; // Décalage vertical
+    drawRoundedRect(ctx, squarePosX, squarePosY, 20, 20, 5);
+  }
   drawRoundedRect(ctx, squarePosX, squarePosY, 20, 20, 5);
 
   // Désactiver l'ombre pour les prochains rectangles à dessiner

@@ -2,7 +2,7 @@ import { initUI } from './ui.js';
 import { initBackdrop } from './backdrop.js';
 import { initSquareVariables } from './square.js';
 import { initObjects } from './objects.js';
-import { resetScoreAndTime } from './score.js';
+import { initScoreAndTime } from './score.js';
 
 import { startGame, setGameRunning, restartGame, initGame, getGameRunning, getPauseStatus, togglePause, acceleration } from './game.js';
 import { setDirectionX, setDirectionY, getDirectionX, getDirectionY } from './snake.js';
@@ -16,11 +16,6 @@ const canvasHeight = canvas.height;
 // Fonction pour redimensionner le canvas
 export function resizeCanvas() {
   let iteration = 4;
-  console.log("canvas.width --> ");
-  console.log(canvas.width);
-  console.log("canvas.height --> ");
-  console.log(canvas.height);
-
   if (canvas.width >= 500) {
     const resizeCanvasInterval = setInterval(() => {
       if (iteration === 0) {
@@ -100,7 +95,7 @@ function initialization() {
   canvas.height = canvasHeight;
 
   initUI(canvas);
-  resetScoreAndTime(); // Initialiser le score et le temps à 0
+  initScoreAndTime(); // Initialiser le score et le temps à 0
 
   initBackdrop(canvas.width, canvas.height);
   initSquareVariables();

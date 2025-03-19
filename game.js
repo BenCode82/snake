@@ -37,13 +37,14 @@ export function getGameRunning() {
 export function initGame(ctx, canvas) {
   console.log("Initialisation du jeu");
   isGameRunning = false;
+  squareAcceleration = false
   gameDelay = 200;
 
   // Initialiser le serpent
   initSnake();
 
   let i = 0;
-  while (i < 2) {
+  while (i < 10) {
     createObject(ctx, canvas.width, canvas.height);
     i += 1;
   }

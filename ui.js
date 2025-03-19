@@ -120,10 +120,10 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
 
         // Tableau contenant les fonctions "evenements"
         const events = [
-          { func: moveSquare, args: [canvasWidth, canvasHeight] },
-          { func: opacitySquare, args: [] },
-          { func: shiftSquare, args: [canvasWidth, canvasHeight] },
-          { func: resizeCanvas, args: [] }
+          // { func: moveSquare, args: [canvasWidth, canvasHeight] },
+          // { func: opacitySquare, args: [] }
+          // { func: shiftSquare, args: [canvasWidth, canvasHeight] },
+          // { func: resizeCanvas, args: [] }
         ];
 
         // Sélection aléatoire d'un evenement
