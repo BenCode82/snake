@@ -44,7 +44,7 @@ export function initGame(ctx, canvas) {
   initSnake();
 
   let i = 0;
-  while (i < 10) {
+  while (i < 2) {
     createObject(ctx, canvas.width, canvas.height);
     i += 1;
   }

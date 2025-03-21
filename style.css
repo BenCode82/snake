@@ -1,12 +1,12 @@
-body {
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  height: 100vh;
-  margin: 0;
-
-  background-color: #8d7e7e;
+  height: 100%;
+  background-color: rgb(230, 218, 218);
 }
 
 .container {
@@ -15,23 +15,62 @@ body {
 
   margin: 10px;
 
-  gap: 100px;
+  /* gap: 100px; */
 
   display: flex;
   flex-direction: row;
 
   align-items: center;
+  justify-content: center;
 }
+
 
 #gameContainer {
   display: flex;
   flex-direction: column;
 
-  width: 100%;
+  width: 60%;
 
   align-items: center;
 
   position: relative;
+}
+
+/* #messageWindow {
+
+  width: 200px;
+  height: auto;
+  margin-left: 20px;
+
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 4px solid #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+  color: #fff;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+  display: none;
+} */
+
+/* Pour les écrans mobiles (moins de 768px) */
+@media (max-width: 767px) {
+  #gameContainer {
+    width: 90%;
+
+    flex-direction: column; /* Change la direction : les éléments sont empilés */
+    align-items: center; /* Centre les éléments */
+  }
+
+  /* #messageWindow {
+    margin-left: 0;
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+  } */
 }
 
 #scoreandtimeBoard {
@@ -39,8 +78,9 @@ body {
   flex-direction: row;
 
   align-items: center;
+  gap: 3rem;
 
-  width: 50%;
+  /* width: 40%; */
   justify-content: space-between;
 }
 
@@ -73,44 +113,27 @@ body {
 }
 
 canvas {
-  border: 5px solid rgb(32, 31, 31); /* Bord plus épais et gris */
+  border: 5px solid rgb(32, 31, 31); /* Bordure grise */
   border-radius: 10px; /* Coins arrondis */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombre pour un effet visuel */
-
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombre */
   background-color: black;
-
-  /* position: sticky; */
-
-  z-index: 1;
+  display: block;
+  margin: 0 auto;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  width: 100%; /* Pour s'adapter à l'écran */
+  height: auto; /* Garde les proportions */
 }
 
-#messageWindow {
-  position: static;
-
-  width: 40%;
-
-  background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
-  border: 4px solid #fff; /* Bordure blanche */
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-
-  color: #fff; /* Texte blanc */
-  font-family: 'Press Start 2P', cursive; /* Police de style rétro */
-  font-size: 18px;
-  line-height: 1.5;
-  text-align: center;
-  display: none; /* Masqué par défaut */
-}
 
 /* Style du contenu du message */
-#messageContent {
+/* #messageContent {
   white-space: pre-wrap; /* Permet les sauts de ligne et les espaces */
   overflow: hidden;
   border-right: 2px solid #fff; /* Effet de curseur clignotant */
 
   animation: blinkCursor 0.75s steps(1) infinite;
-}
+} */
 
 /* Animation du curseur clignotant */
 @keyframes blinkCursor {

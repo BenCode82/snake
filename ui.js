@@ -3,8 +3,8 @@ import { createObject } from './objects.js';
 import { getGameRunning } from './game.js';
 import { resizeCanvas } from './controller.js';
 
-const messageContent = document.getElementById('messageContent');
-const messageWindow = document.getElementById('messageWindow');
+// const messageContent = document.getElementById('messageContent');
+// const messageWindow = document.getElementById('messageWindow');
 const countdownElement = document.getElementById("countdown");
 
 let currentMessageInterval,currentCountdownInterval,disparitionInterval;
@@ -54,7 +54,7 @@ export function updateTimeDisplay(newTime) {
 
 export function showMessage(message, speed = 40) {
     // Afficher la fenêtre
-  messageWindow.style.display = 'block';
+  // messageWindow.style.display = 'block';
 
   // Arrêter l'affichage du message en cours (s'il y en a un)
   if (currentMessageInterval) {
@@ -63,13 +63,13 @@ export function showMessage(message, speed = 40) {
   }
 
   // Réinitialiser le contenu
-  messageContent.textContent = '';
+  // messageContent.textContent = '';
 
   let index = 0;
   currentMessageInterval = setInterval(() => {
     if (index < message.length) {
       // Ajouter une lettre à la fois
-      messageContent.textContent += message[index];
+      // messageContent.textContent += message[index];
       index++;
     } else {
       // Arrêter l'animation
@@ -82,7 +82,7 @@ export function showMessage(message, speed = 40) {
     if(getGameRunning()) {
       clearInterval(currentMessageInterval);
       currentMessageInterval = null;
-      messageContent.textContent = '';
+      // messageContent.textContent = '';
       // messageWindow.style.display = 'none';
     }
   }, 12000);
@@ -120,10 +120,10 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
 
         // Tableau contenant les fonctions "evenements"
         const events = [
-          // { func: moveSquare, args: [canvasWidth, canvasHeight] },
-          // { func: opacitySquare, args: [] }
-          // { func: shiftSquare, args: [canvasWidth, canvasHeight] },
-          // { func: resizeCanvas, args: [] }
+          { func: moveSquare, args: [canvasWidth, canvasHeight] },
+          { func: opacitySquare, args: [] },
+          { func: shiftSquare, args: [canvasWidth, canvasHeight] },
+          { func: resizeCanvas, args: [] }
         ];
 
         // Sélection aléatoire d'un evenement

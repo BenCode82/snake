@@ -13,6 +13,28 @@ const ctx = canvas.getContext('2d');
 const canvasWidth = canvas.width;
 const canvasHeight = canvas.height;
 
+function adjustCanvasSize() {
+  const canvas = document.getElementById("mainCanvas");
+  const ctx = canvas.getContext("2d");
+
+  if (window.innerWidth >= 768) {
+    // Écran d'ordinateur
+    canvas.width = 660;
+    canvas.height = 440;
+  } else {
+    // Écran de téléphone
+    canvas.width = 380;
+    canvas.height = 600;
+  }
+
+  // Efface l'ancien contenu et redessine si nécessaire
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// Ajuste au chargement et au redimensionnement
+window.addEventListener("load", adjustCanvasSize);
+window.addEventListener("resize", adjustCanvasSize);
+
 // Fonction pour redimensionner le canvas
 export function resizeCanvas() {
   let iteration = 4;
@@ -93,6 +115,8 @@ document.addEventListener('keydown', (event) => {
 function initialization() {
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
+  console.log(canvasWidth);
+  console.log(canvasHeight);
 
   initUI(canvas);
   initScoreAndTime(); // Initialiser le score et le temps à 0
