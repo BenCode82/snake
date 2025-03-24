@@ -115,8 +115,6 @@ document.addEventListener('keydown', (event) => {
 function initialization() {
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
-  console.log(canvasWidth);
-  console.log(canvasHeight);
 
   initUI(canvas);
   initScoreAndTime(); // Initialiser le score et le temps à 0
@@ -127,6 +125,39 @@ function initialization() {
 
   initGame(ctx, canvas);
 }
+
+const joystick = nipplejs.create({
+  zone: document.getElementById("joystick-zone"), // Où apparaît le joystick
+  mode: "dynamic", // Le joystick apparaît où l’utilisateur pose le doigt
+  position: { left: "50%", bottom: "50px" }, // Position initiale
+  color: "blue", // Couleur du joystick
+});
+
+joystick.on("move", (event, data) => {
+  console.log("move");
+  
+  if (data.direction) {
+    let direction = data.direction.angle; // Obtient l'angle de direction
+
+    if (direction === "up") {
+      setDirectionX(0);
+      setDirectionY(-20);
+    };
+    if (direction === "down") {
+      setDirectionX(0);
+      setDirectionY(20);
+    };
+    if (direction === "left") {
+      setDirectionX(-20);
+      setDirectionY(0);
+
+    };
+    if (direction === "right") {
+      setDirectionX(20);
+      setDirectionY(0);;
+    }
+  }
+});
 
 // // OUTIL pour connaitre la position du pointeur !
 // document.addEventListener("mousemove", (event) => {

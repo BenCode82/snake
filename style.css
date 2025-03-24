@@ -172,3 +172,13 @@ canvas {
     transform: translate(-50%, -50%) rotate(0deg) scale(0);
   }
 }
+
+
+#joystick-zone {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 150px;
+}
