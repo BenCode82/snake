@@ -1,21 +1,20 @@
 body, html {
   margin: 0;
   padding: 0;
+
   overflow: hidden;
   display: flex;
+
   justify-content: center;
   align-items: center;
   height: 100%;
+
   background-color: rgb(230, 218, 218);
 }
 
 .container {
   width: 100vw;
-  height: 100%;
-
-  margin: 10px;
-
-  /* gap: 100px; */
+  /* height: 100vh; */
 
   display: flex;
   flex-direction: row;
@@ -24,96 +23,33 @@ body, html {
   justify-content: center;
 }
 
-
-
-/* #messageWindow {
-
-  width: 200px;
-  height: auto;
-  margin-left: 20px;
-
-  background-color: rgba(0, 0, 0, 0.8);
-  border: 4px solid #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-
-  color: #fff;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 18px;
-  line-height: 1.5;
-  text-align: center;
-  display: none;
-  } */
-
-  /* Pour les écrans mobiles (moins de 768px) */
-  /* @media (max-width: 767px) {
-    #gameContainer {
-      width: 90%;
-
-      flex-direction: column;
-      align-items: center;
-      } */
-
-      /* #messageWindow {
-        margin-left: 0;
-        margin-top: 20px;
-        width: 100%;
-        text-align: center;
-        } */
-      /* } */
-
-#scoreandtimeBoard {
-  display: flex;
-  flex-direction: row;
-
-  align-items: center;
-  gap: 3rem;
-
-  /* width: 40%; */
-  justify-content: space-between;
-}
-
-#scorediv {
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-}
-
-#timediv {
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-}
-
-#scoreBoard {
-  color: black;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 30px;
-  font-weight: 800;
-}
-
-#timeBoard {
-  color: black;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 30px;
-  font-weight: 800;
-}
-
 #gameContainer {
   position: relative;
+
   width: 800px;
   height: 540px;
 
+  margin: 0.5rem;
+
   display: flex;
   flex-direction: column;
 
-  /* width: 60%; */
   z-index: 0;
   align-items: center;
-  /* position: relative; */
+}
+
+#backdrop {
+  position: absolute;
+  top: -50px;
+  left: 0;
+
+  z-index: 1;
+
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+
+  width: 100%;
+  height: auto;
 
   background-color: black;
 
@@ -122,28 +58,48 @@ body, html {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombre */
 }
 
-#backdrop {
-  position: absolute;
-  z-index: 1;
-
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
-
-  width: 100%;
-  height: 100%;
-}
-
 #mainCanvas {
   position: absolute;
+  top: -50px;
+  left: 0;
+
   z-index: 10;
 
-  display: block;
-  margin: 0 auto;
-
-  width: 100%; /* Pour s'adapter à l'écran */
+  width: 100%;
   height: auto; /* Garde les proportions */
 }
 
+#scoreandtimeBoard {
+  position: absolute; /* Permet de superposer */
+  bottom: -40px; /* Position en bas du gameContainer */
+  @media (max-width: 767px) {
+    bottom: -80px;
+  }
+
+  left: 50%; /* Centrage horizontal */
+  transform: translateX(-50%); /* Ajustement précis */
+
+  z-index: 2; /* Doit être PLUS ÉLEVÉ que les canvas (10) */
+
+  width: 60%;
+
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+#scorediv, #timediv {
+  font-size: 20px;
+  font-weight: bold;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
 
 /* Style du contenu du message */
 /* #messageContent {
@@ -155,13 +111,19 @@ body, html {
 } */
 
 /* Animation du curseur clignotant */
-@keyframes blinkCursor {
+/* @keyframes blinkCursor {
   50% {
     border-right-color: transparent;
   }
-}
+} */
 
 #countdown {
+  font-size: 50px;
+  font-weight: bold;
+  color: red;
+
+  display: none;
+
   position: absolute;
   color:rgba(0, 0, 0, 0.4);
 
@@ -171,6 +133,7 @@ body, html {
   user-select: none; /* Empêche la sélection du texte */
 
   z-index: 10;
+
   animation: shakeAndShrink 1s linear infinite;
 }
 
@@ -192,11 +155,48 @@ body, html {
   }
 }
 
-#joystick-zone {
+/* #joystick-zone {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   width: 150px;
   height: 150px;
-}
+} */
+
+/* #messageWindow {
+
+  width: 200px;
+  height: auto;
+  margin-left: 20px;
+
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 4px solid #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+  color: #fff;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+  display: none;
+  } */
+
+/* Pour les écrans mobiles (moins de 768px) */
+/* @media (max-width: 767px) {
+#gameContainer {
+  width: 90%;
+
+  flex-direction: column;
+  align-items: center;
+  } */
+
+  /* #messageWindow {
+    margin-left: 0;
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    } */
+  /* } */

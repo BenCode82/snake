@@ -1,18 +1,14 @@
-let stars, milkyStars, starCount, milkyStarCount; // Nombre de points pour la Voie lactée
-
-// Set up the canvas and context
-// const backdropCanvas = document.getElementById('backdrop');
-// const ctx = backdropCanvas.getContext('2d');
-
-let backdropCanvas;
-let ctx;
+let stars, milkyStars, starCount, milkyStarCount;
+let backdropCanvas, ctx;
 
 export function initBackdrop(canvasWidth, canvasHeight) {
   stars = [];
   milkyStars = [];
+
   starCount = canvasWidth * canvasHeight / 1000;
   milkyStarCount = canvasWidth * canvasHeight / 100;
 
+  // Set up the canvas and context
   backdropCanvas = document.getElementById('backdrop');
   ctx = backdropCanvas.getContext('2d');
 
@@ -71,7 +67,14 @@ function initMilkyWay() {
   const maxOpacity = 0.15; // Opacité maximale
   const centerX = backdropCanvas.width / 2;
   const centerY = backdropCanvas.height / 2;
-  const spread = backdropCanvas.width / 2; // Étendue de la région dense
+
+  let spread;
+  if (backdropCanvas.width > backdropCanvas.height) {
+    spread = backdropCanvas.width / 2; // Étendue de la région dense
+  } else {
+    spread = backdropCanvas.height / 2; // Étendue de la région dense
+  }
+
 
   for (let i = 0; i < milkyStarCount; i++) {
     // Position aléatoire autour du centre

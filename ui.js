@@ -90,17 +90,24 @@ export function showMessage(message, speed = 40) {
 
 // Fonction pour centrer le décompte sur le canvas
 function centerCountdown(canvas) {
-  // Obtenir les dimensions et la position du canvas par rapport à son conteneur
-  const canvasRect = canvas.getBoundingClientRect();
-  const containerRect = canvas.parentElement.getBoundingClientRect();
 
-  // Calculer la position relative du canvas dans son conteneur
-  const canvasTop = canvasRect.top - containerRect.top;
-  const canvasLeft = canvasRect.left - containerRect.left;
+  console.log("window.innerWidth");
+  console.log(window.innerHeight);
+
+  console.log("canvas.width");
+  console.log(canvas.width);
+
+  // // Obtenir les dimensions et la position du canvas par rapport à son conteneur
+  // const canvasRect = canvas.getBoundingClientRect();
+  // const containerRect = canvas.parentElement.getBoundingClientRect();
+
+  // // Calculer la position relative du canvas dans son conteneur
+  // const canvasTop = canvasRect.top - containerRect.top;
+  // const canvasLeft = canvasRect.left - containerRect.left;
 
   // Centrer verticalement le décompte sur le canvas
-  countdownElement.style.top = `${canvasTop + canvas.height/2}px`;
-  countdownElement.style.left = `${canvasLeft + canvas.width/2 - 270}px`;
+  countdownElement.style.top = `${(canvas.height / 2) - 50}px`;
+  countdownElement.style.left = `${(canvas.width) / 2}px`;
   countdownElement.style.transform = "translate(-50%, -50%)";
 }
 
@@ -108,7 +115,7 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
   if (isCountdowning) return;
 
   isCountdowning = true;
-  let count = Math.floor(Math.random()*3 + 1); // Commence à 3 avec entre 0 et 2 sec de delai
+  let count = Math.floor(Math.random()*3 + 3); // Commence à 3 avec entre 0 et 2 sec de delai
   currentCountdownInterval = setInterval(() => {
     if (getGameRunning()) {
       if (count === 0) {
@@ -136,7 +143,9 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
         countdownElement.textContent = count; // Met à jour le chiffre
         countdownElement.style.display = "block"; // Affiche l'élément
         count -= 1;
-        if (count == 2 && Math.random() > 0.8) { showMessage("Vite !\n\n........");; }
+        if (count == 2 && Math.random() > 0.8) {
+          // showMessage("Vite !\n\n........");
+        }
       } else if (count >= 4 && isCountdowning) {
         countdownElement.textContent = "";
         countdownElement.style.display = "none"; // Cache l'élément

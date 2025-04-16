@@ -155,6 +155,7 @@ function initialization() {
 //   }
 // });
 
+
 // // OUTIL pour connaitre la position du pointeur !
 // document.addEventListener("mousemove", (event) => {
 //   console.log(`X: ${event.clientX}, Y: ${event.clientY}`);
