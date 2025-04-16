@@ -28,6 +28,8 @@ export function initSnake() {
     { x: 180, y: 180, color: newRandomColor() },
     { x: 160, y: 180, color: newRandomColor() }
   ];
+
+
 }
 
 export function collisionDetected(canvasWidth, canvasHeight) {
@@ -151,7 +153,7 @@ function invertColors(ctx) {
       snake.forEach(segment => {
         segment.color = invertRGBColor(segment.color);
       });
-      drawSnake(ctx);
+      // drawSnake(ctx);
     }, i * interval);
   }
 }

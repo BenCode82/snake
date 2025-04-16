@@ -1,7 +1,7 @@
 export function shiftSquare() {
   let iteration = 4;
 
-  showMessage("OOOhhhhHHH, ça bouge.............");
+  // showMessage("OOOhhhhHHH, ça bouge.............");
 
   shiftInterval = setInterval(() => {
 

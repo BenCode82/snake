@@ -1,18 +1,31 @@
-let stars,milkyStars;
-const starCount = 200;
-const milkyStarCount = 2000; // Nombre de points pour la Voie lactée
+let stars, milkyStars, starCount, milkyStarCount; // Nombre de points pour la Voie lactée
 
 // Set up the canvas and context
-const backdropCanvas = document.getElementById('backdrop');
-const ctx = backdropCanvas.getContext('2d');
+// const backdropCanvas = document.getElementById('backdrop');
+// const ctx = backdropCanvas.getContext('2d');
 
-export function initBackdrop() {
+let backdropCanvas;
+let ctx;
+
+export function initBackdrop(canvasWidth, canvasHeight) {
   stars = [];
   milkyStars = [];
+  starCount = canvasWidth * canvasHeight / 1000;
+  milkyStarCount = canvasWidth * canvasHeight / 100;
 
+  backdropCanvas = document.getElementById('backdrop');
+  ctx = backdropCanvas.getContext('2d');
+
+  backdropCanvas.width = canvasWidth;
+  backdropCanvas.height = canvasHeight;
+
+  // console.log("backdropCanvas.width =");
+  // console.log(backdropCanvas.width);
+  // console.log("backdropCanvas.height =");
+  // console.log(backdropCanvas.height);
 
   initStars();
-  initMilkyWay(backdropCanvas.width);
+  initMilkyWay();
 
   drawBackdrop();
 }
@@ -24,7 +37,7 @@ export function drawBackdrop() {
   shineStars();
   drawMilkyWay();
 
-  setTimeout(() => drawBackdrop(), 400);
+  setTimeout(() => drawBackdrop(), 200);
 }
 
 function initStars() {
@@ -32,8 +45,8 @@ function initStars() {
   for (let i = 0; i < starCount; i++) {
     const x = Math.random() * backdropCanvas.width;
     const y = Math.random() * backdropCanvas.height;
-    const radius = Math.random() + 0.5;
-    const opacity = Math.random() * 0.5 + 0.4;
+    const radius = Math.random() + 1;
+    const opacity = Math.random() * 0.5 + 0.5;
 
     stars.push({ x, y, radius, opacity });
   }
@@ -45,15 +58,15 @@ function shineStars() {
     if (star.x <= backdropCanvas.width && star.y <= backdropCanvas.height) {
       ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity })`;
       ctx.beginPath();
-      ctx.arc(star.x+(Math.random() * 1)*0.2, star.y+(Math.random() * 1)*0.2, star.radius + ((Math.random() * 1)*0.1), 0, Math.PI * 2);
+      ctx.arc(star.x+(Math.random() * 1 + 1)*0.5, star.y+(Math.random() * 1 + 1)*0.5, star.radius + ((Math.random() * 1)*0.2), 0, Math.PI * 2);
       ctx.fill();
     }
   }
 }
 
 function initMilkyWay() {
-  const minRadius = 0.4; // Rayon minimal des points
-  const maxRadius = 1; // Rayon maximal des points
+  const minRadius = 0.5; // Rayon minimal des points
+  const maxRadius = 1.5; // Rayon maximal des points
   const minOpacity = 0.5; // Opacité minimale
   const maxOpacity = 0.15; // Opacité maximale
   const centerX = backdropCanvas.width / 2;
@@ -76,7 +89,7 @@ function initMilkyWay() {
     const color = colorVariation < 0.2 ? `rgba(200, 220, 255, ${opacity})` : `rgba(255, 255, 255, ${opacity})`;
 
     // Vitesse aléatoire pour chaque étoile
-    const speed = Math.random() * 0.2 + 0.1; // Vitesse entre 0.1 et 0.6
+    const speed = Math.random() * 0.3 + 0.1;
 
     milkyStars.push({ x, y, radius, color, speed });
   }

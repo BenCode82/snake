@@ -39,7 +39,7 @@ export function createObject(ctx, canvasWidth, canvasHeight) {
     shadowBlur: 8,
     shadowOffsetX: 3,
     shadowOffsetY: 5,
-    fillColor: newRandomColorA(0.3),
+    fillColor: newRandomColorA(0.5),
     borderColor: "rgba(255, 255, 255, 0.6)", // Bordure claire pour l'effet de verre
     highlightColor: "rgba(255, 255, 255, 0.3)", // Reflet lumineux
     visible: true,

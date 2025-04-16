@@ -7,28 +7,23 @@ import { initScoreAndTime } from './score.js';
 import { startGame, setGameRunning, restartGame, initGame, getGameRunning, getPauseStatus, togglePause, acceleration } from './game.js';
 import { setDirectionX, setDirectionY, getDirectionX, getDirectionY } from './snake.js';
 
-// Set up the canvas and context
-const canvas = document.getElementById('mainCanvas');
-const ctx = canvas.getContext('2d');
-const canvasWidth = canvas.width;
-const canvasHeight = canvas.height;
+let canvas;
+let ctx;
 
 function adjustCanvasSize() {
-  const canvas = document.getElementById("mainCanvas");
-  const ctx = canvas.getContext("2d");
+  // Set up the canvas and context
+  canvas = document.getElementById("mainCanvas");
+  ctx = canvas.getContext("2d");
 
   if (window.innerWidth >= 768) {
     // Écran d'ordinateur
-    canvas.width = 660;
-    canvas.height = 440;
+    canvas.width = 800;
+    canvas.height = 540;
   } else {
     // Écran de téléphone
     canvas.width = 380;
     canvas.height = 600;
   }
-
-  // Efface l'ancien contenu et redessine si nécessaire
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 // Ajuste au chargement et au redimensionnement
@@ -103,7 +98,7 @@ document.addEventListener('keydown', (event) => {
   // Mettre en pause ou reprendre le jeu
   if (event.code === 'Space') {
     if (!getGameRunning() && !getPauseStatus()) {
-      initialization()
+      initialization();
     }
     else {
       togglePause(ctx, canvas);
@@ -113,14 +108,14 @@ document.addEventListener('keydown', (event) => {
 
 // Initialiser les variables du jeu
 function initialization() {
-  canvas.width = canvasWidth;
-  canvas.height = canvasHeight;
+  // console.log("canvasWidth =");
+  // console.log(canvas.width);
+  // console.log("canvasHeight =");
+  // console.log(canvas.height);
 
-  initBackdrop();
 
   initUI(canvas);
   initScoreAndTime(); // Initialiser le score et le temps à 0
-
 
   initSquareVariables();
   initObjects();
@@ -164,5 +159,8 @@ function initialization() {
 // document.addEventListener("mousemove", (event) => {
 //   console.log(`X: ${event.clientX}, Y: ${event.clientY}`);
 // });
+
+adjustCanvasSize();
+initBackdrop(canvas.width, canvas.height);
 
 initialization();

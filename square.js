@@ -113,7 +113,7 @@ export function moveSquare(canvasWidth, canvasHeight) {
 export function shiftSquare(canvasWidth, canvasHeight) {
   let iteration = 40;
 
-  showMessage("OOOhhhhHHH, ça bouge.............");
+  // showMessage("OOOhhhhHHH, ça bouge.............");
 
   shiftInterval = setInterval(() => {
     if (iteration === 0) {

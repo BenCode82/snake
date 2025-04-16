@@ -62,7 +62,7 @@ export function initGame(ctx, canvas) {
 }
 
 export function startGame(ctx, canvas) {
-  showMessage("Le jeu démarre.\nBonne Chance !");
+  // showMessage("Le jeu démarre.\nBonne Chance !");
 
   startCount(); // Démarre le compteur
   gameLoop(ctx, canvas); // Démarrer la boucle de jeu
@@ -84,7 +84,7 @@ export function endGame() {
     stopCountdown();
 
     // Afficher un message pour rejouer
-    showMessage("Appuie sur ESPACE pour rejouer !");
+    // showMessage("Appuie sur ESPACE pour rejouer !");
 
     // Mettre à jour l'état du jeu
     isGameRunning = false;
@@ -126,7 +126,7 @@ export function togglePause(ctx, canvas) {
   if (isPaused) {
       // Reprendre le jeu
       isPaused = false;
-      showMessage("Le jeu reprend !");
+      // showMessage("Le jeu reprend !");
       isGameRunning = true; // Relancer le jeu
       startCount();
 
@@ -134,7 +134,7 @@ export function togglePause(ctx, canvas) {
   } else {
       // Mettre en pause le jeu
       isPaused = true;
-      showMessage('Jeu en pause.\n\nAppuie sur ESPACE pour reprendre !');
+      // showMessage('Jeu en pause.\n\nAppuie sur ESPACE pour reprendre !');
       isGameRunning = false; // Arrêter le jeu
 
       stopCount();

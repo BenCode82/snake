@@ -70,7 +70,7 @@ async function asyncTimeCounter() {
     }
     else if (score > 6000 && !messageSent6000) {
       changeDelay(80);
-      showMessage("Tu entres dans le couloir de la mort. \nBonne chance \n \n 💀💀💀");
+      // showMessage("Tu entres dans le couloir de la mort. \nBonne chance \n \n 💀💀💀");
       messageSent6000 = true;
     }
     else if (score > 4500 && !messageSent4500) {
@@ -87,7 +87,7 @@ async function asyncTimeCounter() {
     }
     else if (score > 2200 && !messageSent2200) {
       changeDelay(120);
-      showMessage("Allons un peu plus vite !");
+      // showMessage("Allons un peu plus vite !");
       messageSent2200 = true;
     }
     else if (score > 1800 && !messageSent1800) {
@@ -100,7 +100,7 @@ async function asyncTimeCounter() {
     }
     else if (score > 1000 && !messageSent1000) {
       changeDelay(150);
-      showMessage("Tu es bon...\non accelere !");
+      // showMessage("Tu es bon...\non accelere !");
       messageSent1000 = true;
     }
     else if (score > 600 && !messageSent600) {
