@@ -115,7 +115,8 @@ export function moveSnake(ctx, canvas) {
   }
 }
 
-export function drawSnake(ctx) {
+export function drawSnake(ctx, canvasWidth, canvasHeight) {
+
   snake.forEach(segment => {
     ctx.fillStyle = segment.color;
 

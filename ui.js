@@ -123,7 +123,7 @@ export function startCountdown(ctx, canvasWidth, canvasHeight) {
           { func: moveSquare, args: [canvasWidth, canvasHeight] },
           { func: opacitySquare, args: [] },
           { func: shiftSquare, args: [canvasWidth, canvasHeight] },
-          { func: resizeCanvas, args: [] }
+          // { func: resizeCanvas, args: [] }
         ];
 
         // Sélection aléatoire d'un evenement

@@ -116,48 +116,49 @@ function initialization() {
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
 
+  initBackdrop();
+
   initUI(canvas);
   initScoreAndTime(); // Initialiser le score et le temps à 0
 
-  initBackdrop(canvas.width, canvas.height);
+
   initSquareVariables();
   initObjects();
 
   initGame(ctx, canvas);
 }
 
-const joystick = nipplejs.create({
-  zone: document.getElementById("joystick-zone"), // Où apparaît le joystick
-  mode: "dynamic", // Le joystick apparaît où l’utilisateur pose le doigt
-  position: { left: "50%", bottom: "50px" }, // Position initiale
-  color: "blue", // Couleur du joystick
-});
+// const joystick = nipplejs.create({
+//   zone: document.getElementById("joystick-zone"), // Où apparaît le joystick
+//   mode: "dynamic", // Le joystick apparaît où l’utilisateur pose le doigt
+//   position: { left: "50%", bottom: "50px" }, // Position initiale
+//   color: "blue", // Couleur du joystick
+// });
 
-joystick.on("move", (event, data) => {
-  console.log("move");
-  
-  if (data.direction) {
-    let direction = data.direction.angle; // Obtient l'angle de direction
+// joystick.on("move", (event, data) => {
 
-    if (direction === "up") {
-      setDirectionX(0);
-      setDirectionY(-20);
-    };
-    if (direction === "down") {
-      setDirectionX(0);
-      setDirectionY(20);
-    };
-    if (direction === "left") {
-      setDirectionX(-20);
-      setDirectionY(0);
+//   if (data.direction) {
+//     let direction = data.direction.angle; // Obtient l'angle de direction
 
-    };
-    if (direction === "right") {
-      setDirectionX(20);
-      setDirectionY(0);;
-    }
-  }
-});
+//     if (direction === "up") {
+//       setDirectionX(0);
+//       setDirectionY(-20);
+//     };
+//     if (direction === "down") {
+//       setDirectionX(0);
+//       setDirectionY(20);
+//     };
+//     if (direction === "left") {
+//       setDirectionX(-20);
+//       setDirectionY(0);
+
+//     };
+//     if (direction === "right") {
+//       setDirectionX(20);
+//       setDirectionY(0);;
+//     }
+//   }
+// });
 
 // // OUTIL pour connaitre la position du pointeur !
 // document.addEventListener("mousemove", (event) => {

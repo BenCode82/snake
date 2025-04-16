@@ -53,6 +53,7 @@ function updateOpacity() {
 }
 
 export function drawSquare(ctx, canvasWidth, canvasHeight) {
+
   if (squarePosX === 0) {
     squarePosX = (Math.floor(Math.random() * ((canvasWidth - 40) / 20)) * 20) + 20;
     squarePosY = (Math.floor(Math.random() * ((canvasHeight - 40) / 20)) * 20) + 20;

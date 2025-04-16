@@ -2,7 +2,6 @@ import { initSnake, drawSnake, moveSnake } from './snake.js';
 import { startCount, stopCount } from './score.js';
 import { showMessage, stopCountdown } from './ui.js';
 import { drawSquare } from './square.js';
-import { drawBackdrop } from './backdrop.js';
 import { moveObjects, createObject } from './objects.js';
 
 let isGameRunning;
@@ -52,7 +51,7 @@ export function initGame(ctx, canvas) {
   // Lancer les fonctions toutes les 200 ms
   gameIntervalId = setInterval(() => {
     if (!isGameRunning) {
-      drawBackdrop(ctx, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawSnake(ctx);
       drawSquare(ctx, canvas.width, canvas.height);
       moveObjects(ctx, canvas.width, canvas.height);
@@ -105,10 +104,11 @@ export function restartGame(ctx, canvas) {
 export function gameLoop(ctx, canvas) {
   if (!isGameRunning) return;
 
-  drawBackdrop(ctx, canvas.width, canvas.height);
+  // Efface le canvas avant de redessiner les objets
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  moveSnake(ctx,canvas);
-  drawSnake(ctx);
+  moveSnake(ctx, canvas);
+  drawSnake(ctx, canvas.width, canvas.height);
   drawSquare(ctx, canvas.width, canvas.height);
 
   moveObjects(ctx, canvas.width, canvas.height);
